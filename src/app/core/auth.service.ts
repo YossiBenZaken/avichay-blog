@@ -5,7 +5,18 @@ import * as firebase from 'firebase/app';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(public afAuth: AngularFireAuth) {}
+  authState: any = null;
+  constructor(public afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(data => this.authState = data);
+  }
+
+  get autnticated(): boolean {
+    return this.authState !== null;
+  }
+
+  get currentUserId(): string {
+    return this.autnticated ? this.authState.uid : null;
+  }
 
   login() {
     return new Promise<any>((resolve, reject) => {
