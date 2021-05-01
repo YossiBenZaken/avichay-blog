@@ -1,0 +1,5 @@
+<div *ngIf="post">
+    <h3>{{post.title}}</h3>
+    <p>posted by {{post.author}} &bull; {{post.published.toMillis() | date:'dd/MM/yyyy HH:mm'}}</p>
+    <p>{{post.content}}</p>
+</div> 

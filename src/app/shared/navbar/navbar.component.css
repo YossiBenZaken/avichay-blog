@@ -1,0 +1,10 @@
+.spacer {
+    flex: 1 1 auto;
+}
+span:focus {
+    outline: none;
+    border: none;
+}
+span {
+    cursor: pointer;
+}
