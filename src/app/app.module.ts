@@ -11,7 +11,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PostsModule } from './posts/posts.module';
-import { SafeHtmlPipe } from './safe-html.pipe';
+import { LocationStrategy,HashLocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   {path: '', redirectTo: '/blog' ,pathMatch: 'full'},
@@ -33,7 +33,9 @@ const routes: Routes = [
     PostsModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
