@@ -1,13 +1,13 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-    <span routerLink="/blog">Avichay-Blog</span>
+    <span routerLink="/blog">מכשפה צבאית</span>
     <span class="spacer"></span>
     <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
-      <button mat-raised-button color="accent" routerLink="/dashboard">Write a Post</button>
-      <button mat-button (click)="_auth.logout()">Logout</button>
+      <button *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'" mat-raised-button color="accent" routerLink="/dashboard">כתוב פוסט</button>
+      <button mat-button (click)="_auth.logout()">התנתק</button>
     </div>
     <ng-template #showLogin>
-      <button mat-button (click)="_auth.login()">Login</button>
+      <button mat-button (click)="_auth.login()">התחבר</button>
     </ng-template>
   </mat-toolbar-row>
 </mat-toolbar>

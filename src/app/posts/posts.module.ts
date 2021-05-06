@@ -1,3 +1,4 @@
+import { SafeHtmlPipe } from './../safe-html.pipe';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from './../shared/shared.module';
 import { PostService } from './post.service';
@@ -17,6 +18,7 @@ const routes: Routes = [
     PostDashboardComponent,
     PostDetailComponent,
     PostListComponent,
+    SafeHtmlPipe
   ],
   imports: [SharedModule, RouterModule.forChild(routes)],
   providers: [PostService],

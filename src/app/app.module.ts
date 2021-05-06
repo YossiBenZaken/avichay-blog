@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PostsModule } from './posts/posts.module';
+import { SafeHtmlPipe } from './safe-html.pipe';
 
 const routes: Routes = [
   {path: '', redirectTo: '/blog' ,pathMatch: 'full'},
