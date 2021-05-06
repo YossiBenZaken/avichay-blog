@@ -31,6 +31,7 @@ export class PostDashboardComponent implements OnInit {
       title: this.title,
       image: this.image,
       published: new Date(),
+      comments: []
     };
     this._posts.create(data);
     this.title = '';

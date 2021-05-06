@@ -6,4 +6,9 @@ export class Post {
     image: string;
     published: Date;
     id?: string;
+    comments: Comment[] = [];
+}
+export class Comment {
+  content: string;
+  name: string;
 }

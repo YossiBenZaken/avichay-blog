@@ -10,3 +10,47 @@ mat-form-field {
   height: auto;
   width: auto !important;
 }
+.share_button a {
+  font-size: 40px;
+  text-decoration: none;
+}
+#fixed_buttons {
+  position: fixed;
+  right: 0;
+  top: 100px;
+}
+#fixed_buttons a {
+  display: block;
+  height: 40px;
+  width: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #fff;
+  transition: all 0.3s;
+  box-sizing: content-box;
+  border-left-style: solid;
+  border-left-width: 0;
+}
+#fixed_buttons a:hover {
+  border-left-width: 5px;
+}
+#fixed_buttons a.facebook {
+  background: #3c5a99;
+  border-color: #3c5a99;
+}
+#fixed_buttons a.twitter {
+  background: #1DA1F2;
+  border-color: #1DA1F2;
+}
+#fixed_buttons a.linkedin {
+  background: #007bb5;
+  border-color: #007bb5;
+}
+#fixed_buttons a.google {
+  background: #db4437;
+  border-color: #db4437;
+}
+#fixed_buttons a.whatsapp {
+  background: #25d366;
+  border-color: #25d366;
+}
