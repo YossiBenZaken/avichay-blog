@@ -104,7 +104,7 @@
   <div [hidden]="editing">
     <mat-card>
       <div style="display: flex; justify-content: center">
-        <img mat-card-image src="{{ post.image }}" alt="{{ post.title }}" />
+        <img *ngIf="post.image" mat-card-image src="{{ post.image }}" alt="{{ post.title }}" />
       </div>
       <h2 style="text-align: center">{{ post.title }}</h2>
       <p style="text-align: center">

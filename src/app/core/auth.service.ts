@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   authState: any = null;
+  user$:Observable<firebase.default.User>;
   constructor(public afAuth: AngularFireAuth) {
     this.afAuth.authState.subscribe(data => this.authState = data);
+    this.user$ = this.afAuth.authState;
   }
 
   get autnticated(): boolean {

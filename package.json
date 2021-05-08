@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ngcc"
+    "postinstall": "ngcc",
+    "deploy": "ng build --prod & firebase deploy"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +19,7 @@
     "@angular/compiler": "~11.0.6",
     "@angular/core": "~11.0.6",
     "@angular/fire": "^6.1.4",
+    "@angular/flex-layout": "^11.0.0-beta.33",
     "@angular/forms": "~11.0.6",
     "@angular/material": "^11.2.11",
     "@angular/platform-browser": "~11.0.6",

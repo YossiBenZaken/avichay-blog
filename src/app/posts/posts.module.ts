@@ -1,3 +1,6 @@
+import { StoreModule } from './../store/store.module';
+import { CategoryService } from './../store/category.service';
+import { ProductService } from './../store/product.service';
 import { SafeHtmlPipe } from './../safe-html.pipe';
 import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from './../shared/shared.module';
@@ -20,7 +23,7 @@ const routes: Routes = [
     PostListComponent,
     SafeHtmlPipe
   ],
-  imports: [SharedModule, RouterModule.forChild(routes)],
-  providers: [PostService],
+  imports: [SharedModule, RouterModule.forChild(routes),StoreModule],
+  providers: [PostService,ProductService,CategoryService],
 })
 export class PostsModule {}

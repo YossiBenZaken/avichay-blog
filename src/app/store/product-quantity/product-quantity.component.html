@@ -1,0 +1,14 @@
+<div class="row no-gutters">
+  <div class="col-2">
+    <button
+    mat-mini-fab color="warn"
+      (click)="removeFromCart()"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+  </div>
+  <div class="col text-center">{{ shoppingCart.getQuantity(product) }} בסל</div>
+  <div class="col-2">
+    <button (click)="addToCart()" mat-mini-fab color="primary"><mat-icon>add</mat-icon></button>
+  </div>
+</div>

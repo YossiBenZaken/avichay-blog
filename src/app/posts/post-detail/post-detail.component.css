@@ -9,6 +9,7 @@ mat-form-field {
   margin: 0 auto;
   height: auto;
   width: auto !important;
+  max-width: 100%;
 }
 .share_button a {
   font-size: 40px;

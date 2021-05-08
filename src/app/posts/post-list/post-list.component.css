@@ -13,7 +13,7 @@ section {
 mat-card {
   margin: 10px 0;
   max-width: 600px;
-  width: 100%;
+  width: 80%;
   display: flex;
   flex-direction: column;
 }
@@ -26,4 +26,7 @@ img {
   max-width: 100%;
   width: auto;
   height: auto;
+}
+mat-form-field{
+  width: 300px;
 }

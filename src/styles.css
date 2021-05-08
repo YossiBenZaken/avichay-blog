@@ -1,11 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; direction: rtl; }
-body { margin: 0; font-family: "Rubik", "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: "Rubik", "Helvetica Neue", sans-serif; overflow-y: hidden; }
 .mat-body, .mat-body-1, .mat-typography {
   font: 400 14px/20px "Rubik", "Helvetica Neue", sans-serif;
   letter-spacing: normal;
 }
 span {
   font-family: "Rubik", sans-serif !important;
+}
+p {
+  margin-bottom: 0.1rem !important;
 }

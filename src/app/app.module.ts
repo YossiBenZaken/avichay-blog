@@ -1,3 +1,4 @@
+import { StoreModule } from './store/store.module';
 import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -15,14 +16,15 @@ import { LocationStrategy,HashLocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   {path: '', redirectTo: '/blog' ,pathMatch: 'full'},
-  {path: '', loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule)}
+  {path: '', loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule)},
+  {path: '', loadChildren: () => import('./store/store.module').then(m => m.StoreModule)}
 ]
 @NgModule({
   declarations: [
     AppComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
@@ -31,6 +33,7 @@ const routes: Routes = [
     SharedModule,
     BrowserAnimationsModule,
     PostsModule,
+    StoreModule,
     RouterModule.forRoot(routes)
   ],
   providers: [

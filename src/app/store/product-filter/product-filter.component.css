@@ -1,0 +1,10 @@
+.sticky-top {
+    top: 80px;
+}
+.list-group-item.active {
+    background-color: #00e676;
+    border-color: #00e676;
+}
+.font-weight-bold {
+    font-weight: bold;
+}

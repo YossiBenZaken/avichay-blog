@@ -1,3 +1,4 @@
+import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -9,6 +10,6 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule
   ],
-  providers: [AuthService]
+  providers: [AuthService,UserService]
 })
 export class CoreModule { }

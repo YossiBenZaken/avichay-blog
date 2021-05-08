@@ -1,13 +1,53 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
+<div>
+  <mat-toolbar color="primary">
+    <div fxShow="true" fxHide.gt-sm="true">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
     <span routerLink="/blog">מכשפה צבאית</span>
     <span class="spacer"></span>
-    <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
-      <button *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'" mat-raised-button color="accent" routerLink="/dashboard">כתוב פוסט</button>
-      <button mat-button (click)="_auth.logout()">התנתק</button>
+    <div fxShow="true" fxHide.lt-md="true">
+      <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
+        <button mat-button routerLink="/store">החנות שלנו</button>
+        <span>
+          <span *ngIf="cart$ | async as cart" class="badge rounded-pill bg-warning">
+            {{ cart.totalItemsCount }}
+          </span>
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        </span>
+        <button *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'" mat-raised-button color="accent" routerLink="/dashboard">ניהול בלוג</button>
+        <button mat-button (click)="_auth.logout()">התנתק</button>
+      </div>
+      <ng-template #showLogin>
+        <button mat-button routerLink="/store">החנות שלנו</button>
+        <button mat-button (click)="_auth.login()">התחבר</button>
+      </ng-template>
     </div>
-    <ng-template #showLogin>
-      <button mat-button (click)="_auth.login()">התחבר</button>
-    </ng-template>
-  </mat-toolbar-row>
-</mat-toolbar>
+  </mat-toolbar>
+  <mat-sidenav-container dir="rtl" fxFlexFill class="example-container">
+    <mat-sidenav
+      color="primary"
+      #sidenav
+      fxLayout="column"
+      mode="over"
+      opened="false"
+      fxHide.gt-sm="true"
+    >
+      <div fxLayout="column">
+        <button mat-button routerLink="/store">החנות שלנו</button>
+        <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
+          <button *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'" mat-raised-button color="accent" routerLink="/dashboard">ניהול בלוג</button>
+          <br>
+          <button mat-button (click)="_auth.logout()">התנתק</button>
+        </div>
+        <ng-template #showLogin>
+          <button mat-button (click)="_auth.login()">התחבר</button>
+        </ng-template>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
