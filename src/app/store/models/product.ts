@@ -24,7 +24,8 @@ export class ShoppingCart {
       this.itemMap = itemMap || {};
       for(let productId in itemMap) {
         let item = itemMap[productId].payload.doc.data();
-          this.items.push(new ShoppingCartItem({...item,id:productId}));
+        let idOfItem = itemMap[productId].payload.doc.id;
+          this.items.push(new ShoppingCartItem({...item,id:idOfItem}));
         }
   }
   getQuantity(product: Product) {

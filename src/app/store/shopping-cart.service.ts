@@ -6,7 +6,7 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
-
+import * as firebase from 'firebase';
 @Injectable({
   providedIn: 'root',
 })
@@ -17,7 +17,11 @@ export class ShoppingCartService {
     this.sCartCollection = this._store.collection('shopping-carts');
   }
   private getItem(cardId: string, productId: string) {
-    return this._store.collection('shopping-carts').doc(cardId).collection('items').doc(productId);
+    return this._store
+      .collection('shopping-carts')
+      .doc(cardId)
+      .collection('items')
+      .doc(productId);
   }
   private create() {
     return this.sCartCollection.add({ dateCreated: new Date().getTime() });
@@ -52,7 +56,7 @@ export class ShoppingCartService {
             title: product.title,
             image: product.image,
             quantity: change,
-            price:product.price
+            price: product.price,
           });
         }
       });
@@ -65,15 +69,40 @@ export class ShoppingCartService {
   }
   async getCart(): Promise<Observable<ShoppingCart>> {
     let cartId = await this.getOrCreateCartId();
-    return this._store.collection('shopping-carts').doc(cartId).collection('items')
+    return this._store
+      .collection('shopping-carts')
+      .doc(cartId)
+      .collection('items')
       .snapshotChanges()
-      .pipe(map((x:any) => {
-        return new ShoppingCart(x)
-      }));
+      .pipe(
+        map((x: any) => {
+          return new ShoppingCart(x);
+        })
+      );
   }
   async clearCart() {
     let cartId = await this.getOrCreateCartId();
-    this._store.collection('shopping-carts').doc(cartId).delete()
-
+    (await this.getCart()).pipe(take(1)).subscribe((a) => {
+      a.items.forEach((item) => {
+        console.log(item)
+        this._store
+          .collection('shopping-carts')
+          .doc(cartId)
+          .collection('items')
+          .doc(item.id)
+          .delete();
+      });
+    });
+    // .subscribe((a) =>
+    //   a.items.forEach((item) => {
+    //     this._store
+    //       .collection('shopping-carts')
+    //       .doc(cartId)
+    //       .collection('items')
+    //       .doc(item.id)
+    //       .delete();
+    //   })
+    // );
+    // this._store.collection(`shopping-carts/${cartId}/items`);
   }
 }
