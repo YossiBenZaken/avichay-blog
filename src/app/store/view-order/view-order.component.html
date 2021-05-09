@@ -1,1 +1,14 @@
-<ul></ul>
+<table *ngIf="order">
+  <tr>
+    <th>שם מוצר</th>
+    <th>כמות</th>
+    <th>מחיר לאחד</th>
+    <th>סה"כ</th>
+  </tr>
+  <tr *ngFor="let item of order.items">
+    <td>{{item.product.title}}</td>
+    <td>{{item.quantity}}</td>
+    <td>{{item.product.price |currency:'₪':true}}</td>
+    <td>{{item.totalPrice|currency:'₪':true}}</td>
+  </tr>
+</table>

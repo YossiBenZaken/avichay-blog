@@ -8,6 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule} from '@angular/material/sidenav';
 import { DxHtmlEditorModule } from 'devextreme-angular/ui/html-editor';
+import {MatBadgeModule} from '@angular/material/badge';
 @NgModule({
   exports: [
     MatButtonModule,
@@ -18,6 +19,7 @@ import { DxHtmlEditorModule } from 'devextreme-angular/ui/html-editor';
     MatCardModule,
     MatIconModule,
     MatSidenavModule,
+    MatBadgeModule,
     DxHtmlEditorModule,
   ],
   imports: [

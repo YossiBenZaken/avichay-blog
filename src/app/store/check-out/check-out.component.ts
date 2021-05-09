@@ -10,10 +10,11 @@ import { ShoppingCart } from '../models/product';
 })
 export class CheckOutComponent implements OnInit {
   cart$: Promise<Observable<ShoppingCart>>;
+  cart: any;
   constructor(private _sCart: ShoppingCartService) { }
 
   async ngOnInit() {
-    this.cart$ = this._sCart.getCart();
+    (await this._sCart.getCart()).subscribe(a => this.cart = a);
   }
 
 }

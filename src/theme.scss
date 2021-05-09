@@ -2,9 +2,9 @@
 @include mat-core();
 
 $ngBlog-app-primary: mat-palette($mat-green, A400);
-$ngBlog-app-accent:  mat-palette($mat-light-blue, A200);
+$ngBlog-app-accent:  mat-palette($mat-orange,A200);
 
-$ngBlog-app-warn:    mat-palette($mat-orange,A200);
+$ngBlog-app-warn:    mat-palette($mat-deep-orange,500);
 
 $ngBlog-app-theme: mat-light-theme($ngBlog-app-primary, $ngBlog-app-accent, $ngBlog-app-warn);
 

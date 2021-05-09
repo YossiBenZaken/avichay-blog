@@ -39,7 +39,8 @@
               'Lucida Console',
               'Tahoma',
               'Times New Roman',
-              'Verdana'
+              'Verdana',
+              'Rubik'
             ]"
           ></dxi-item>
           <dxi-item formatName="separator"></dxi-item>
@@ -106,7 +107,7 @@
       <div style="display: flex; justify-content: center">
         <img *ngIf="post.image" mat-card-image src="{{ post.image }}" alt="{{ post.title }}" />
       </div>
-      <h2 style="text-align: center">{{ post.title }}</h2>
+      <h2 style="text-align: center;color: #000;">{{ post.title }}</h2>
       <p style="text-align: center">
         <small
           >נכתב ע"י {{ post.author }} &bull; ב
@@ -120,10 +121,10 @@
         align="end"
         *ngIf="_auth.currentUserId === post.authorID"
       >
-        <button mat-icon-button (click)="editing = true">
+        <button mat-icon-button (click)="editing = true" color="primary">
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-icon-button (click)="delete(post.id)">
+        <button mat-icon-button (click)="delete(post.id)" color="warn">
           <mat-icon>delete</mat-icon>
         </button>
       </mat-card-actions>
@@ -155,7 +156,7 @@
         <textarea matInput placeholder="" [(ngModel)]="comment.content"></textarea>
       </mat-form-field>
       <div style="text-align: left">
-        <button mat-raised-button (click)="updateComment()" color="accent">
+        <button mat-raised-button (click)="updateComment()" color="primary">
           להגיב
         </button>
       </div>

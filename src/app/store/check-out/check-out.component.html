@@ -1,9 +1,9 @@
-<h2>Shipping</h2>
-<div class="row" *ngIf="cart$ | async as cart">
+<h2 class="text-center">ביצוע הזמנה</h2>
+<div class="row px-5 mx-5" *ngIf="cart">
   <div class="col-6">
-    <shopping-form [cart]="cart"></shopping-form>
+    <app-shopping-form [cart]="cart"></app-shopping-form>
   </div>
   <div class="col-6">
-    <shopping-cart-summary [cart]="cart"></shopping-cart-summary>
+    <app-shopping-cart-summary [cart]="cart"></app-shopping-cart-summary>
   </div>
 </div>

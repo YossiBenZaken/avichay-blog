@@ -52,6 +52,7 @@ export class ShoppingCartService {
             title: product.title,
             image: product.image,
             quantity: change,
+            price:product.price
           });
         }
       });
@@ -72,6 +73,7 @@ export class ShoppingCartService {
   }
   async clearCart() {
     let cartId = await this.getOrCreateCartId();
-    this._store.collection('shopping-carts').doc(cartId).collection('items').doc().delete();
+    this._store.collection('shopping-carts').doc(cartId).delete()
+
   }
 }

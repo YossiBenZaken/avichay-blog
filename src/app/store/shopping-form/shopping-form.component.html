@@ -1,0 +1,25 @@
+<form #f="ngForm">
+  <div class="form-group">
+      <label for="">שם המזמין</label>
+      <input #name="ngModel" name="name" [(ngModel)]="Shop.name" type="text" class="form-control" required>
+      <div class="alert alert-danger" *ngIf="name.touched && name.invalid">
+          <div *ngIf="name.errors.required">שם המזמין חובה.</div>
+      </div>
+  </div>
+  <div class="form-group">
+      <label for="">כתובת למשלוח</label>
+      <input #addressLine1="ngModel" name="addressLine1" [(ngModel)]="Shop.addressLine1" type="text"
+          class="form-control" placeholder="רחוב,דירה,מספר בית" required>
+      <div class="alert alert-danger" *ngIf="addressLine1.touched && addressLine1.invalid">
+          <div *ngIf="addressLine1.errors.required">כתובת למשלוח חובה.</div>
+      </div>
+  </div>
+  <div class="form-group">
+      <label for="">עיר</label>
+      <input #city="ngModel" name="city" [(ngModel)]="Shop.city" type="text" class="form-control" required>
+      <div class="alert alert-danger" *ngIf="city.touched && city.invalid">
+          <div *ngIf="city.errors.required">City is required.</div>
+      </div>
+  </div>
+  <button class="mt-3" [disabled]="!f.valid" (click)="placeOrder()" mat-raised-button color="primary">בצע הזמנה</button>
+</form>

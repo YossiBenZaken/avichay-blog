@@ -1,3 +1,4 @@
+import { Order } from './models/product';
 import { ShoppingCartService } from './shopping-cart.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -11,9 +12,12 @@ export class OrderService {
     private _store: AngularFirestore,
     private _sCart: ShoppingCartService
   ) {}
-  async placeOrder(order) {
-    let result = await this._store.collection('orders').add(order);
-    this._sCart.clearCart();
+  async placeOrder(order:Order) {
+    let result = await this._store.collection('orders').add({
+      datePlaced:order.datePlaced,
+      items: order.items
+    });
+    let clearOrder = await this._sCart.clearCart()
     return result;
   }
   getOrders() {

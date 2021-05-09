@@ -15,6 +15,8 @@ import { CheckOutComponent } from './check-out/check-out.component';
 import { OrderSuccessComponent } from './order-success/order-success.component';
 import { MyOrdersComponent } from './my-orders/my-orders.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
+import { ShoppingFormComponent } from './shopping-form/shopping-form.component';
+import { ShoppingCartSummaryComponent } from './shopping-cart-summary/shopping-cart-summary.component';
 
 const routes: Routes = [
   { path: 'store', component: ProductsComponent },
@@ -36,6 +38,8 @@ const routes: Routes = [
     OrderSuccessComponent,
     MyOrdersComponent,
     ViewOrderComponent,
+    ShoppingFormComponent,
+    ShoppingCartSummaryComponent,
   ],
   imports: [SharedModule, RouterModule.forChild(routes)],
   providers: [ShoppingCartService, CategoryService, ProductService,OrderService],

@@ -57,7 +57,8 @@ export class PostDetailComponent implements OnInit {
     if (!this.post.comments) {
       this.post.comments = [];
     }
-    this.post.comments.push(this.comment);
+    let c = Object.assign({},this.comment);
+    this.post.comments.push(c);
     const comment = this.post.comments.map((obj) => Object.assign({}, obj));
     const formData = {
       comments: comment,
