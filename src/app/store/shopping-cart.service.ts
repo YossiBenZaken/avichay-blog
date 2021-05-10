@@ -93,16 +93,5 @@ export class ShoppingCartService {
           .delete();
       });
     });
-    // .subscribe((a) =>
-    //   a.items.forEach((item) => {
-    //     this._store
-    //       .collection('shopping-carts')
-    //       .doc(cartId)
-    //       .collection('items')
-    //       .doc(item.id)
-    //       .delete();
-    //   })
-    // );
-    // this._store.collection(`shopping-carts/${cartId}/items`);
   }
 }
