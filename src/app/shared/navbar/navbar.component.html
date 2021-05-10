@@ -7,18 +7,34 @@
     </div>
     <i class="fas fa-hat-wizard fa-lg"></i>
     <span>&nbsp;</span>
-    <span routerLink="/blog" style="font-size: 1.5rem;">מכשפה צבאית</span>
+    <span routerLink="/blog" style="font-size: 1.5rem">מכשפה צבאית</span>
     <span class="spacer"></span>
     <div fxShow="true" fxHide.lt-md="true">
       <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
         <button mat-button routerLink="/store">החנות שלנו</button>
         <button mat-icon-button routerLink="/check-out">
-          <mat-icon matBadgeColor="warn"  *ngIf="cart$ | async as cart" matBadge="{{ cart.totalItemsCount || '' }}">
+          <mat-icon
+            matBadgeColor="warn"
+            *ngIf="cart$ | async as cart"
+            matBadge="{{ cart.totalItemsCount || '' }}"
+          >
             shopping_cart
-        </mat-icon>
+          </mat-icon>
         </button>
-        <button *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'" mat-raised-button color="accent" routerLink="/dashboard">ניהול בלוג</button>
-        <button mat-button (click)="_auth.logout()">התנתק</button>
+        <button mat-button [matMenuTriggerFor]="menu">
+          {{ user.displayName }}
+          <mat-icon>arrow_drop_down</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2'"
+            routerLink="/dashboard"
+          >
+            ניהול בלוג
+          </button>
+          <button mat-menu-item (click)="_auth.logout()">התנתק</button>
+        </mat-menu>
       </div>
       <ng-template #showLogin>
         <button mat-button routerLink="/store">החנות שלנו</button>
@@ -36,11 +52,22 @@
       fxHide.gt-sm="true"
     >
       <div fxLayout="column">
-        <button mat-button routerLink="/store">החנות שלנו</button>
         <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
-          <button *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'" mat-raised-button color="accent" routerLink="/dashboard">ניהול בלוג</button>
-          <br>
-          <button mat-button (click)="_auth.logout()">התנתק</button>
+          <button mat-button [matMenuTriggerFor]="menu">
+            {{ user.displayName }}
+            <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="/store">החנות שלנו</button>
+            <button
+              mat-menu-item
+              *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2'"
+              routerLink="/dashboard"
+            >
+              ניהול בלוג
+            </button>
+            <button mat-menu-item (click)="_auth.logout()">התנתק</button>
+          </mat-menu>
         </div>
         <ng-template #showLogin>
           <button mat-button (click)="_auth.login()">התחבר</button>

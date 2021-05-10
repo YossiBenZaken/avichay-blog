@@ -1,3 +1,4 @@
+import { AuthService } from './../core/auth.service';
 import { Order } from './models/product';
 import { ShoppingCartService } from './shopping-cart.service';
 import { Injectable } from '@angular/core';
@@ -10,12 +11,15 @@ import { map } from 'rxjs/operators';
 export class OrderService {
   constructor(
     private _store: AngularFirestore,
-    private _sCart: ShoppingCartService
+    private _sCart: ShoppingCartService,
+    private _auth: AuthService
   ) {}
   async placeOrder(order:Order) {
     let result = await this._store.collection('orders').add({
       datePlaced:order.datePlaced,
-      items: order.items
+      items: order.items,
+      shipping: order.shipping,
+      userId: this._auth.currentUserId
     });
     let clearOrder = await this._sCart.clearCart()
     return result;
@@ -35,7 +39,7 @@ export class OrderService {
   }
   getOrdersByUser(userId: string) {
     const ordersRef = this._store.collection('orders', (ref) =>
-      ref.orderBy('userId').where('userId', '==', userId)
+      ref.orderBy('userId')
     );
     return ordersRef
       .snapshotChanges()

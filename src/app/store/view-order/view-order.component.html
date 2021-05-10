@@ -11,4 +11,8 @@
     <td>{{item.product.price |currency:'₪':true}}</td>
     <td>{{item.totalPrice|currency:'₪':true}}</td>
   </tr>
+  <tr>
+    <td colspan="3">סה"כ</td>
+    <td>{{TotalPrice() | currency:'₪':true}}</td>
+  </tr>
 </table>

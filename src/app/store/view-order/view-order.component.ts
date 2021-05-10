@@ -10,15 +10,26 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ViewOrderComponent {
   id;
-  order;
+  order: {
+    datePlaced: number;
+    items: Array<any>
+  };
   items: any[];
   products: Product[] = [];
-  constructor(private _route: ActivatedRoute,private _order: OrderService) { 
+  constructor(private _route: ActivatedRoute,private _order: OrderService) {
     this.id = this._route.snapshot.paramMap.get('id');
     if(this.id) {
-      this._order.get(this.id).subscribe(p => this.order = p);
+      this._order.get(this.id).subscribe((p: {
+        datePlaced: number;
+        items: Array<any>
+      }) => {
+        this.order = p
+        console.log(p)
+      } );
     }
   }
-
+  TotalPrice() {
+    return this.order.items.reduce((a,b) => a + b.totalPrice,0);
+  }
 
 }

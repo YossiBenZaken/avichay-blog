@@ -17,6 +17,7 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
 import { ViewOrderComponent } from './view-order/view-order.component';
 import { ShoppingFormComponent } from './shopping-form/shopping-form.component';
 import { ShoppingCartSummaryComponent } from './shopping-cart-summary/shopping-cart-summary.component';
+import { EditProductComponent } from './edit-product/edit-product.component';
 
 const routes: Routes = [
   { path: 'store', component: ProductsComponent },
@@ -24,7 +25,8 @@ const routes: Routes = [
   { path: 'check-out', component: CheckOutComponent },
   { path: 'order-success/:id', component: OrderSuccessComponent },
   { path: 'my-orders', component: MyOrdersComponent },
-  { path: 'view-order/:id',component: ViewOrderComponent}
+  { path: 'view-order/:id',component: ViewOrderComponent},
+  { path: 'edit-product/:id', component: EditProductComponent}
 ];
 
 @NgModule({
@@ -40,6 +42,7 @@ const routes: Routes = [
     ViewOrderComponent,
     ShoppingFormComponent,
     ShoppingCartSummaryComponent,
+    EditProductComponent,
   ],
   imports: [SharedModule, RouterModule.forChild(routes)],
   providers: [ShoppingCartService, CategoryService, ProductService,OrderService],

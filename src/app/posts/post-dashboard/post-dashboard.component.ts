@@ -1,19 +1,23 @@
+import { OrderService } from './../../store/order.service';
 import { Product } from './../../store/models/product';
 import { ProductService } from './../../store/product.service';
 import { CategoryService } from './../../store/category.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { PostService } from './../post.service';
 import { AuthService } from './../../core/auth.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { Post } from '../post';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Title } from '@angular/platform-browser';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 @Component({
   selector: 'app-post-dashboard',
   templateUrl: './post-dashboard.component.html',
   styleUrls: ['./post-dashboard.component.css'],
 })
-export class PostDashboardComponent implements OnInit {
+export class PostDashboardComponent implements OnInit,OnDestroy,AfterViewInit {
   title: string;
   image: string = null;
   content: string;
@@ -24,6 +28,14 @@ export class PostDashboardComponent implements OnInit {
   product:Product = new Product();
   categoryF;
   id;
+  subscription: Subscription;
+  subscriptionProducts: Subscription;
+  displayedColumns = ['name', 'date', 'orderNumber', 'view'];
+  displayedPColumns = ['title', 'price', 'edit'];
+  dataSource = new MatTableDataSource();
+  dataSourceProducts = new MatTableDataSource();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
   constructor(
     private _auth: AuthService,
     private _posts: PostService,
@@ -31,13 +43,32 @@ export class PostDashboardComponent implements OnInit {
     private _title: Title,
     private _cat: CategoryService,
     private _product: ProductService,
-
+    private _order: OrderService
   ) {
     this.categories$ = _cat.getAll();
-    this._title.setTitle('מכשפה צבאית - פאנל ניהול')
+    this._title.setTitle('מכשפה צבאית - פאנל ניהול');
+    this.subscription = this._order.getOrders()
+    .subscribe(orders => {
+      this.dataSource.data = orders;
+    });
+    this.subscriptionProducts = this._product.getAll()
+    .subscribe(products => {
+      this.dataSourceProducts.data = products;
+    });
   }
-
   ngOnInit(): void {}
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+  applyFilter(filterValue:string) {
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
+    this.dataSource.filter= filterValue;
+  }
   createPost() {
     const data: Post = {
       author: this._auth.authState.displayNAme || this._auth.authState.email,

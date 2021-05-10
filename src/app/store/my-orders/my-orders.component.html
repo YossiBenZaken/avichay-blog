@@ -1,19 +1,20 @@
-<h1>Orders</h1>
+<h1>הזמנות</h1>
 <table class="table">
   <thead>
     <tr>
-      <th>Customer</th>
-      <th>Date</th>
+      <th>שם לקוח</th>
+      <th>תאריך</th>
       <th></th>
     </tr>
-  </thead> 
+  </thead>
   <tbody>
     <tr *ngFor="let order of orders$ | async">
       <td>{{ order.shipping.name }}</td>
       <td>{{ order.datePlaced | date}}</td>
       <td>
-        <a [routerLink]="['/view/order/',order.id]">View</a>
+        <a [routerLink]="['/view-order/',order.id]">הצג הזמנה</a>
       </td>
     </tr>
-  </tbody> 
+
+  </tbody>
 </table>
