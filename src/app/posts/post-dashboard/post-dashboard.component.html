@@ -24,9 +24,18 @@
         </div>
       </div>
 
-      <mat-form-field style="text-align: right">
+      <mat-form-field style="text-align: right;width: 300px;">
         <input matInput placeholder="כותרת הפוסט" [(ngModel)]="title" />
       </mat-form-field>
+      <div style="width:300px">
+        <dx-tag-box
+                    [items]="tags"
+                    [acceptCustomValue]="true"
+                    placeholder="תגיות"
+                    [rtlEnabled]="true"
+                    (onCustomItemCreating)="onCustomItemCreating($event)">
+                </dx-tag-box>
+      </div>
       <dx-html-editor height="725px" [(value)]="content">
         <dxo-toolbar [multiline]="true">
           <dxi-item formatName="undo"></dxi-item>
@@ -111,6 +120,37 @@
       >
         {{ buttonText }}
       </button>
+    </mat-expansion-panel>
+  </mat-accordion>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> סטטיסטיקות </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="container">
+        <div class="table-container mat-elevation-z3">
+
+          <mat-table [dataSource]="dataSourcePosts">
+            <!-- Title Column -->
+            <ng-container matColumnDef="title">
+              <mat-header-cell *matHeaderCellDef> שם מוצר </mat-header-cell>
+              <mat-cell *matCellDef="let product">{{ product.title }}</mat-cell>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="views">
+              <mat-header-cell *matHeaderCellDef> צפיות </mat-header-cell>
+              <mat-cell *matCellDef="let product"> {{ product.views || 0 }} </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedPostsColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedPostsColumns;">
+            </mat-row>
+          </mat-table>
+        </div>
+
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
   <mat-accordion>

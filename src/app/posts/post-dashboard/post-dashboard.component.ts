@@ -5,7 +5,13 @@ import { CategoryService } from './../../store/category.service';
 import { Observable, Subscription } from 'rxjs';
 import { PostService } from './../post.service';
 import { AuthService } from './../../core/auth.service';
-import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+  AfterViewInit,
+} from '@angular/core';
 import { Post } from '../post';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Title } from '@angular/platform-browser';
@@ -17,23 +23,29 @@ import { MatSort } from '@angular/material/sort';
   templateUrl: './post-dashboard.component.html',
   styleUrls: ['./post-dashboard.component.css'],
 })
-export class PostDashboardComponent implements OnInit,OnDestroy,AfterViewInit {
+export class PostDashboardComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
   title: string;
   image: string = null;
   content: string;
+  tags: string[];
   buttonText: string = 'צור פוסט';
   uploadPercent: Observable<number>;
   downloadURL: Promise<any>;
   categories$;
-  product:Product = new Product();
+  product: Product = new Product();
   categoryF;
   id;
   subscription: Subscription;
   subscriptionProducts: Subscription;
+  subscriptionPosts: Subscription;
   displayedColumns = ['name', 'date', 'orderNumber', 'view'];
   displayedPColumns = ['title', 'price', 'edit'];
+  displayedPostsColumns = ['title', 'views'];
   dataSource = new MatTableDataSource();
   dataSourceProducts = new MatTableDataSource();
+  dataSourcePosts = new MatTableDataSource();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(
@@ -47,14 +59,16 @@ export class PostDashboardComponent implements OnInit,OnDestroy,AfterViewInit {
   ) {
     this.categories$ = _cat.getAll();
     this._title.setTitle('מכשפה צבאית - פאנל ניהול');
-    this.subscription = this._order.getOrders()
-    .subscribe(orders => {
+    this.subscription = this._order.getOrders().subscribe((orders) => {
       this.dataSource.data = orders;
     });
-    this.subscriptionProducts = this._product.getAll()
-    .subscribe(products => {
+    this.subscriptionProducts = this._product.getAll().subscribe((products) => {
       this.dataSourceProducts.data = products;
     });
+    this.subscriptionPosts = this._posts
+      .getPosts()
+      .subscribe((posts) => (this.dataSourcePosts.data = posts));
+    this._posts.getTags().subscribe(tags => this.tags = tags.map((a:any) => a = a.tag));
   }
   ngOnInit(): void {}
   ngAfterViewInit() {
@@ -63,11 +77,13 @@ export class PostDashboardComponent implements OnInit,OnDestroy,AfterViewInit {
   }
   ngOnDestroy() {
     this.subscription.unsubscribe();
+    this.subscriptionPosts.unsubscribe();
+    this.subscriptionProducts.unsubscribe();
   }
-  applyFilter(filterValue:string) {
+  applyFilter(filterValue: string) {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
-    this.dataSource.filter= filterValue;
+    this.dataSource.filter = filterValue;
   }
   createPost() {
     const data: Post = {
@@ -77,7 +93,9 @@ export class PostDashboardComponent implements OnInit,OnDestroy,AfterViewInit {
       title: this.title,
       image: this.image,
       published: new Date(),
-      comments: []
+      comments: [],
+      views: 0,
+      tags: [],
     };
     this._posts.create(data);
     this.title = '';
@@ -89,15 +107,17 @@ export class PostDashboardComponent implements OnInit,OnDestroy,AfterViewInit {
   uploadImage(e) {
     const file = e.target.files[0];
     const path = `posts/${file.name}`;
-    if(file.type.split('/')[0] !== 'image') {
-      return alert('רק תמונות')
+    if (file.type.split('/')[0] !== 'image') {
+      return alert('רק תמונות');
     } else {
-      const task = this._storage.upload(path,file);
-      task.then(a => a.ref.getDownloadURL().then(url => this.image = url));
+      const task = this._storage.upload(path, file);
+      task.then((a) =>
+        a.ref.getDownloadURL().then((url) => (this.image = url))
+      );
       this.uploadPercent = task.percentageChanges();
     }
   }
-  saveProduct(product:Product) {
+  saveProduct(product: Product) {
     this._product.create(product);
     this.product.title = '';
     this.product.category = '';
@@ -109,9 +129,14 @@ export class PostDashboardComponent implements OnInit,OnDestroy,AfterViewInit {
     this.categoryF = '';
   }
   delete() {
-    if(!confirm('האם אתה בטוח שאתה רוצה למחוק את המוצר הזה?')){
+    if (!confirm('האם אתה בטוח שאתה רוצה למחוק את המוצר הזה?')) {
       return;
     }
     this._product.delete(this.id);
+  }
+  onCustomItemCreating(args) {
+    let newValue = args.text;
+    this._posts.createTag({ tag: newValue });
+    args.customItem = newValue;
   }
 }

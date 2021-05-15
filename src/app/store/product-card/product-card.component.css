@@ -2,10 +2,12 @@
     margin-bottom: 30px;
 }
 
-.card-footer {
-    padding: 0;
-}
 
 .card-footer button {
     cursor: pointer;
+}
+
+.card-img-top {
+  max-height: 400px;
+  height: 100%;
 }

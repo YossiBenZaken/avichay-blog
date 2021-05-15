@@ -35,6 +35,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { DxHtmlEditorModule } from 'devextreme-angular/ui/html-editor';
+import { DxTagBoxModule } from 'devextreme-angular/ui/tag-box';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
@@ -57,6 +58,7 @@ import {
     MatTableModule,
     MatPaginatorModule,
     DxHtmlEditorModule,
+    DxTagBoxModule
   ],
   imports: [
     MatButtonModule,

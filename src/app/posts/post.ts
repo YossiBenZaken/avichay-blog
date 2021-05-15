@@ -7,8 +7,14 @@ export class Post {
     published: Date;
     id?: string;
     comments: Comment[] = [];
+    views: number;
+    tags:string[];
 }
 export class Comment {
   content: string;
   name: string;
+}
+export class Tag {
+  id?:string;
+  tag:string;
 }

@@ -32,7 +32,6 @@ export class PostDetailComponent implements OnInit {
 
   async ngOnInit() {
     await this.getPost();
-
   }
   getPost() {
     const id = this._route.snapshot.paramMap.get('id');
@@ -42,6 +41,12 @@ export class PostDetailComponent implements OnInit {
       .then((doc) => {
         if (doc.exists) {
           this.post = doc.data();
+          if(this.post.views) {
+            this.post.views +=1;
+          } else {
+            this.post.views = 1;
+          }
+          this._posts.update(id,this.post);
           this._title.setTitle('מכשפה צבאית - ' + this.post.title);
           this._meta.updateTag({
             property: 'og:title',
@@ -57,7 +62,7 @@ export class PostDetailComponent implements OnInit {
               content: this.post.image,
             });
           }
-          
+
         }
       }).then(()=>{
         setTimeout(() => {

@@ -21,12 +21,12 @@
           <div *ngIf="price.errors.min">Price should be 0 or higher.</div>
         </div>
         <div class="form-group">
-          <label for="imageUrl">Image URL</label>
-          <input #imageUrl="ngModel" [(ngModel)]="product.image" name="imageUrl" id="imageUrl" type="text" class="form-control" required url>
+          <label for="image">Image URL</label>
+          <input #image="ngModel" [(ngModel)]="product.image" name="image" id="image" type="text" class="form-control" required url>
         </div>
-        <div class="alert alert-danger" *ngIf="imageUrl.touched && imageUrl.invalid">
-          <div *ngIf="imageUrl.errors.required">Image URL is required.</div>
-          <div *ngIf="imageUrl.errors.url">Please enter a valid URL.</div>
+        <div class="alert alert-danger" *ngIf="image.touched && image.invalid">
+          <div *ngIf="image.errors.required">Image URL is required.</div>
+          <div *ngIf="image.errors.url">Please enter a valid URL.</div>
         </div>
 
         <button class="btn btn-primary">Save</button>
