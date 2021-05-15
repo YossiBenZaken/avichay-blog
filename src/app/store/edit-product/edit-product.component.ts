@@ -33,6 +33,7 @@ export class EditProductComponent {
     }
   }
   save(product) {
+    console.log(this.id);
     if (this.id) this._product.update(this.id, product);
     this._router.navigateByUrl('/dashboard');
   }
