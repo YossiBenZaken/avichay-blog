@@ -21,6 +21,8 @@ export class PostDetailComponent implements OnInit {
   post: Post;
   editing: boolean = false;
   comment: Comment = new Comment();
+  tags: string[];
+  tagsItems:string[];
   constructor(
     private _route: ActivatedRoute,
     private _posts: PostService,
@@ -31,6 +33,7 @@ export class PostDetailComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
+    this._posts.getTags().subscribe(tags => this.tagsItems = tags.map((a:any) => a = a.tag));
     await this.getPost();
   }
   getPost() {
@@ -77,6 +80,7 @@ export class PostDetailComponent implements OnInit {
     const formData = {
       title: this.post.title,
       content: this.post.content,
+      tags:this.tags
     };
     const id = this._route.snapshot.paramMap.get('id');
     this._posts.update(id, formData);
@@ -129,5 +133,10 @@ export class PostDetailComponent implements OnInit {
         '_blank'
       );
     }
+  }
+  onCustomItemCreating(args) {
+    let newValue = args.text;
+    this._posts.createTag({ tag: newValue });
+    args.customItem = newValue;
   }
 }

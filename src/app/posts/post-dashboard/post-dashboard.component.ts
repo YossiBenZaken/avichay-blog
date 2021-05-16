@@ -30,6 +30,7 @@ export class PostDashboardComponent
   image: string = null;
   content: string;
   tags: string[];
+  tagsItems:string[];
   buttonText: string = 'צור פוסט';
   uploadPercent: Observable<number>;
   downloadURL: Promise<any>;
@@ -68,7 +69,7 @@ export class PostDashboardComponent
     this.subscriptionPosts = this._posts
       .getPosts()
       .subscribe((posts) => (this.dataSourcePosts.data = posts));
-    this._posts.getTags().subscribe(tags => this.tags = tags.map((a:any) => a = a.tag));
+    this._posts.getTags().subscribe(tags => this.tagsItems = tags.map((a:any) => a = a.tag));
   }
   ngOnInit(): void {}
   ngAfterViewInit() {
@@ -95,12 +96,13 @@ export class PostDashboardComponent
       published: new Date(),
       comments: [],
       views: 0,
-      tags: [],
+      tags: this.tags,
     };
     this._posts.create(data);
     this.title = '';
     this.content = '';
     this.image = null;
+    this.tags = [];
     this.buttonText = 'פוסט נוצר!';
     setTimeout(() => (this.buttonText = 'צור פוסט'), 3000);
   }

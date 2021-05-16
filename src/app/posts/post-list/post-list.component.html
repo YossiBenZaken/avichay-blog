@@ -1,13 +1,14 @@
-<section  style="margin-bottom: 2em;">
+<section id="listOfPost" style="margin-bottom: 2em;">
   <mat-form-field style="text-align: right;">
     <mat-icon matPrefix>search</mat-icon>
-    <input matInput type="search" placeholder="חפש פוסט" class="search-input" (input)="filterPost()" [(ngModel)]="filter">
+    <input matInput type="search" placeholder="חפש פוסט או תגיות" class="search-input" (input)="filterPost()" [(ngModel)]="filter">
 </mat-form-field>
   <mat-card *ngFor="let post of filteredPosts">
-    <mat-card-content routerLink="{{post.id}}" style="text-align: center;">
-      <h2 style="color: #000;">{{post.title}}</h2>
-      <img *ngIf="post.image" src="{{post.image}}" alt="{{post.title}}">
+    <mat-card-content style="text-align: center;">
+      <h2 style="color: #000;" routerLink="{{post.id}}">{{post.title}}</h2>
+      <img *ngIf="post.image" src="{{post.image}}" alt="{{post.title}}" routerLink="{{post.id}}">
       <p><small>נכתב ע"י {{post.author}} &bull; ב {{post.published.toMillis() | date:'dd/MM/yyyy HH:mm'}}</small></p>
+      <p *ngIf="post.tags && post.tags.length > 0">מתויג <i><span *ngFor="let tag of post.tags; let i = index" (click)="filter = tag; filterPost()">{{tag}} {{i == post.tags.length - 1 ? '' : ','}}</span></i></p>
     </mat-card-content>
     <mat-card-actions align="end" *ngIf="_auth.currentUserId === post.authorID">
       <button mat-icon-button (click)="delete(post.id)" color="warn">
@@ -15,4 +16,9 @@
       </button>
     </mat-card-actions>
   </mat-card>
+  <div class="pagination">
+    <a href="#">&laquo;</a>
+    <a [ngClass]="{'active':this.page == i + 1}" (click)="changePage(i + 1)" *ngFor="let p of [].constructor(numOfPages); let i = index">{{i+1}}</a>
+    <a href="#">&raquo;</a>
+  </div>
 </section>

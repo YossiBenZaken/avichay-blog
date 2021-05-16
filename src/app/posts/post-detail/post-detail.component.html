@@ -10,6 +10,17 @@
           name="title"
         />
       </mat-form-field>
+      <div style="width:300px">
+        <dx-tag-box
+                    [items]="tagsItems"
+                    [acceptCustomValue]="true"
+                    placeholder="תגיות"
+                    [rtlEnabled]="true"
+                    [(value)]="tags"
+                    [searchEnabled]="true"
+                    (onCustomItemCreating)="onCustomItemCreating($event)">
+                </dx-tag-box>
+      </div>
       <br />
       <!-- <mat-form-field> -->
       <dx-html-editor height="725px" [(value)]="post.content">
