@@ -13,7 +13,7 @@ section {
 mat-card {
   margin: 10px 0;
   max-width: 600px;
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   background-color: #efefef70;
@@ -37,13 +37,9 @@ mat-form-field{
 .pagination a {
   color: black;
   float: left;
-  padding: 8px 16px;
+  padding: 8px 14px;
   text-decoration: none;
   transition: background-color .3s;
-}
-.pagination a.active {
-  background-color: #00e676;
-  color: white;
 }
 .pagination a:hover:not(.active) {
   background-color: #ddd;

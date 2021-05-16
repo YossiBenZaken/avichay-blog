@@ -1,10 +1,17 @@
 .sticky-top {
     top: 80px;
+    width: 100%;
 }
-.list-group-item.active {
+@media(min-width:400px) {
+.sticky-top {
+  position: fixed;
+  width: 150px;
+}
+}
+/* .list-group-item.active {
     background-color: #00e676;
     border-color: #00e676;
-}
+} */
 .font-weight-bold {
     font-weight: bold;
 }

@@ -5,10 +5,30 @@ import { Observable} from 'rxjs';
 import { Post } from '../post';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css']
+  styleUrls: ['./post-list.component.css'],
+  animations: [
+    trigger('changePage',[
+      state('active', style({
+        backgroundColor: '#00e676',
+        color: 'black',
+        fontWeight: 'bold',
+        borderRadius: '50%',
+        cursor:'pointer'
+      })),
+      state('notActive',style({
+        backgroundColor: 'transparent',
+        fontWeight: 'normal',
+        cursor:'pointer'
+      })),
+      transition('active <=> notActive', [
+        animate('0.3s')
+      ])
+    ])
+  ]
 })
 export class PostListComponent implements OnInit {
   posts: Observable<Post[]>;
@@ -44,6 +64,8 @@ export class PostListComponent implements OnInit {
     }
   }
   changePage(page) {
+    if(page > this.numOfPages) return;
+    if(page < 1) return;
     this.page = page;
     this.posts.subscribe(p => {
       this.filteredPosts = p.slice(this.page ? (this.page - 1) * 10 : 0,this.page*10 || 10)

@@ -17,7 +17,8 @@ import { LocationStrategy,HashLocationStrategy } from '@angular/common';
 const routes: Routes = [
   {path: '', redirectTo: '/blog' ,pathMatch: 'full'},
   {path: '', loadChildren: () => import('./posts/posts.module').then(m => m.PostsModule)},
-  {path: '', loadChildren: () => import('./store/store.module').then(m => m.StoreModule)}
+  {path: '', loadChildren: () => import('./store/store.module').then(m => m.StoreModule)},
+  {path: '**', redirectTo: '/blog', pathMatch: 'full'}
 ]
 @NgModule({
   declarations: [

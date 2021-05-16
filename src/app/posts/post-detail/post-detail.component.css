@@ -56,3 +56,14 @@ mat-form-field {
   background: #25d366;
   border-color: #25d366;
 }
+section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-rows: auto;
+  grid-gap: 10px; */
+  margin: 0 auto;
+  max-width: 95%;
+}

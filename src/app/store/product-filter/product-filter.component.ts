@@ -1,11 +1,30 @@
 import { CategoryService } from './../category.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { animate, state, style, transition, trigger, useAnimation } from '@angular/animations';
 
 @Component({
   selector: 'app-product-filter',
   templateUrl: './product-filter.component.html',
-  styleUrls: ['./product-filter.component.css']
+  styleUrls: ['./product-filter.component.css'],
+  animations: [
+    trigger('chooseCategory',[
+      state('active', style({
+        backgroundColor: '#00e676',
+        borderColor: '#00e676',
+        color:'black',
+        fontWeight:'bold'
+      })),
+      state('notActive', style({
+        backgroundColor: 'white',
+        borderColor: '#00000020',
+        color:'black',
+      })),
+      transition('active <=> notActive',[
+        animate('0.3s')
+      ])
+    ])
+  ]
 })
 export class ProductFilterComponent implements OnInit {
   categories$;
