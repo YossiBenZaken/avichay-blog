@@ -30,7 +30,7 @@ export class PostDashboardComponent
   image: string = null;
   content: string;
   tags: string[];
-  tagsItems:string[];
+  tagsItems: string[];
   buttonText: string = 'צור פוסט';
   uploadPercent: Observable<number>;
   downloadURL: Promise<any>;
@@ -43,10 +43,9 @@ export class PostDashboardComponent
   subscriptionPosts: Subscription;
   displayedColumns = ['name', 'date', 'orderNumber', 'view'];
   displayedPColumns = ['title', 'price', 'edit'];
-  displayedPostsColumns = ['title', 'views'];
   dataSource = new MatTableDataSource();
   dataSourceProducts = new MatTableDataSource();
-  dataSourcePosts = new MatTableDataSource();
+  dataSourcePosts;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   constructor(
@@ -66,10 +65,17 @@ export class PostDashboardComponent
     this.subscriptionProducts = this._product.getAll().subscribe((products) => {
       this.dataSourceProducts.data = products;
     });
-    this.subscriptionPosts = this._posts
-      .getPosts()
-      .subscribe((posts) => (this.dataSourcePosts.data = posts));
-    this._posts.getTags().subscribe(tags => this.tagsItems = tags.map((a:any) => a = a.tag));
+    this.subscriptionPosts = this._posts.getPosts().subscribe((posts) => {
+      posts.forEach(post => {
+        post.views = post.views ? post.views : 0
+      })
+      this.dataSourcePosts = posts;
+    });
+    this._posts
+      .getTags()
+      .subscribe(
+        (tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag)))
+      );
   }
   ngOnInit(): void {}
   ngAfterViewInit() {
@@ -141,4 +147,16 @@ export class PostDashboardComponent
     this._posts.createTag({ tag: newValue });
     args.customItem = newValue;
   }
+  customizeTooltip(arg) {
+    return {
+      text: arg.argumentText
+  };
+  }
+  pointClick(e: any) {
+    var point = e.target;
+    point.showTooltip();
+    setTimeout(() => {
+      point.hideTooltip();
+    },2000)
+}
 }

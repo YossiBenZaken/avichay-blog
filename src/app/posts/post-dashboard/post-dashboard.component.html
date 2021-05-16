@@ -24,19 +24,20 @@
         </div>
       </div>
 
-      <mat-form-field style="text-align: right;width: 300px;">
+      <mat-form-field style="text-align: right; width: 300px">
         <input matInput placeholder="כותרת הפוסט" [(ngModel)]="title" />
       </mat-form-field>
-      <div style="width:300px">
+      <div style="width: 300px" class="mb-4">
         <dx-tag-box
-                    [items]="tagsItems"
-                    [acceptCustomValue]="true"
-                    placeholder="תגיות"
-                    [rtlEnabled]="true"
-                    [(value)]="tags"
-                    [searchEnabled]="true"
-                    (onCustomItemCreating)="onCustomItemCreating($event)">
-                </dx-tag-box>
+          [items]="tagsItems"
+          [acceptCustomValue]="true"
+          placeholder="תגיות"
+          [rtlEnabled]="true"
+          [(value)]="tags"
+          [searchEnabled]="true"
+          (onCustomItemCreating)="onCustomItemCreating($event)"
+        >
+        </dx-tag-box>
       </div>
       <dx-html-editor height="725px" [(value)]="content">
         <dxo-toolbar [multiline]="true">
@@ -129,29 +130,23 @@
       <mat-expansion-panel-header>
         <mat-panel-title> סטטיסטיקות </mat-panel-title>
       </mat-expansion-panel-header>
-
       <div class="container">
-        <div class="table-container mat-elevation-z3">
-
-          <mat-table [dataSource]="dataSourcePosts">
-            <!-- Title Column -->
-            <ng-container matColumnDef="title">
-              <mat-header-cell *matHeaderCellDef> שם מוצר </mat-header-cell>
-              <mat-cell *matCellDef="let product">{{ product.title }}</mat-cell>
-            </ng-container>
-
-            <!-- Price Column -->
-            <ng-container matColumnDef="views">
-              <mat-header-cell *matHeaderCellDef> צפיות </mat-header-cell>
-              <mat-cell *matCellDef="let product"> {{ product.views || 0 }} </mat-cell>
-            </ng-container>
-
-            <mat-header-row *matHeaderRowDef="displayedPostsColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedPostsColumns;">
-            </mat-row>
-          </mat-table>
-        </div>
-
+        <dx-pie-chart
+        palette="bright"
+        [dataSource]="dataSourcePosts"
+        (onPointClick)="pointClick($event)">
+        <dxo-tooltip [enabled]="false" [zIndex]="5000" [customizeTooltip]="customizeTooltip"></dxo-tooltip>
+        <dxo-legend [visible]="false"></dxo-legend>
+        <dxi-series
+            argumentField="title"
+            valueField="views">
+            <dxo-label [visible]="true">
+                <dxo-connector
+                    [visible]="true"
+                    [width]="1"></dxo-connector>
+            </dxo-label>
+        </dxi-series>
+    </dx-pie-chart>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
@@ -371,9 +366,7 @@
 
       <div class="container">
         <div class="table-container mat-elevation-z3">
-
           <mat-table [dataSource]="dataSourceProducts">
-
             <!-- Title Column -->
             <ng-container matColumnDef="title">
               <mat-header-cell *matHeaderCellDef> שם מוצר </mat-header-cell>
@@ -383,21 +376,28 @@
             <!-- Price Column -->
             <ng-container matColumnDef="price">
               <mat-header-cell *matHeaderCellDef> מחיר </mat-header-cell>
-              <mat-cell *matCellDef="let product"> {{ product.price | currency:'₪':true }} </mat-cell>
+              <mat-cell *matCellDef="let product">
+                {{ product.price | currency: "₪":true }}
+              </mat-cell>
             </ng-container>
 
             <!-- Edit Column -->
-            <ng-container matColumnDef="edit" >
+            <ng-container matColumnDef="edit">
               <mat-header-cell *matHeaderCellDef></mat-header-cell>
-              <mat-cell *matCellDef="let product"><a [routerLink]="['/edit-product/', product.id]">עריכה</a></mat-cell>
+              <mat-cell *matCellDef="let product"
+                ><a [routerLink]="['/edit-product/', product.id]"
+                  >עריכה</a
+                ></mat-cell
+              >
             </ng-container>
 
-            <mat-header-row *matHeaderRowDef="displayedPColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedPColumns;">
+            <mat-header-row
+              *matHeaderRowDef="displayedPColumns"
+            ></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedPColumns">
             </mat-row>
           </mat-table>
         </div>
-
       </div>
     </mat-expansion-panel>
   </mat-accordion>

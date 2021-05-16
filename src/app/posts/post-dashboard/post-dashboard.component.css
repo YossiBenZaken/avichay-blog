@@ -32,3 +32,6 @@ img {
   overflow: auto;
   max-height: 500px;
 }
+.mat-expansion-panel-header-title {
+  user-select: none;
+}

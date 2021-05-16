@@ -33,6 +33,7 @@
           >
             ניהול בלוג
           </button>
+          <button mat-menu-item routerLink="/my-orders">היסטוריית הזמנות</button>
           <button mat-menu-item (click)="_auth.logout()">התנתק</button>
         </mat-menu>
       </div>
@@ -40,6 +41,17 @@
         <button mat-button routerLink="/store">החנות שלנו</button>
         <button mat-button (click)="_auth.login()">התחבר</button>
       </ng-template>
+    </div>
+    <div fxShow="false" fxHide.lt-md="false">
+      <button mat-icon-button routerLink="/check-out">
+        <mat-icon
+          matBadgeColor="warn"
+          *ngIf="cart$ | async as cart"
+          matBadge="{{ cart.totalItemsCount || '' }}"
+        >
+          shopping_cart
+        </mat-icon>
+      </button>
     </div>
   </mat-toolbar>
   <mat-sidenav-container dir="rtl" fxFlexFill class="example-container">
@@ -53,19 +65,21 @@
     >
       <div fxLayout="column">
         <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
+          <button class="text-center fw-bold" mat-menu-item routerLink="/store" (click)="sidenav.toggle()">החנות שלנו</button>
           <button mat-button [matMenuTriggerFor]="menu">
             {{ user.displayName }}
             <mat-icon>arrow_drop_down</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item routerLink="/store">החנות שלנו</button>
             <button
               mat-menu-item
               *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2'"
               routerLink="/dashboard"
+              (click)="sidenav.toggle()"
             >
               ניהול בלוג
             </button>
+            <button mat-menu-item routerLink="/my-orders" (click)="sidenav.toggle()">היסטוריית הזמנות</button>
             <button mat-menu-item (click)="_auth.logout()">התנתק</button>
           </mat-menu>
         </div>
