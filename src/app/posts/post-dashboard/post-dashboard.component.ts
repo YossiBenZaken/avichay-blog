@@ -29,10 +29,11 @@ export class PostDashboardComponent
   title: string;
   image: string = null;
   content: string;
-  tags: string[];
+  tags: string[] = [];
   tagsItems: string[];
   buttonText: string = 'צור פוסט';
   uploadPercent: Observable<number>;
+  uploadTempPercent: Observable<number>;
   downloadURL: Promise<any>;
   categories$;
   product: Product = new Product();
@@ -46,8 +47,15 @@ export class PostDashboardComponent
   dataSource = new MatTableDataSource();
   dataSourceProducts = new MatTableDataSource();
   dataSourcePosts;
+  uploadImagePopUp: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  toolbarButtonOptions: any = {
+    text: 'העלה תמונה',
+    stylingMode: 'text',
+    onClick: () => this.uploadImagePopUp = true
+  }
+  uploadTempImage:string = null;
   constructor(
     private _auth: AuthService,
     private _posts: PostService,
@@ -93,24 +101,26 @@ export class PostDashboardComponent
     this.dataSource.filter = filterValue;
   }
   createPost() {
-    const data: Post = {
-      author: this._auth.authState.displayNAme || this._auth.authState.email,
-      authorID: this._auth.currentUserId,
-      content: this.content,
-      title: this.title,
-      image: this.image,
-      published: new Date(),
-      comments: [],
-      views: 0,
-      tags: this.tags,
-    };
-    this._posts.create(data);
-    this.title = '';
-    this.content = '';
-    this.image = null;
-    this.tags = [];
-    this.buttonText = 'פוסט נוצר!';
-    setTimeout(() => (this.buttonText = 'צור פוסט'), 3000);
+    this._auth.user$.subscribe(user => {
+      const data: Post = {
+        author: user.displayName || user.email,
+        authorID: user.uid,
+        content: this.content,
+        title: this.title,
+        image: this.image,
+        published: new Date(),
+        comments: [],
+        views: 0,
+        tags: this.tags,
+      };
+      this._posts.create(data);
+      this.title = '';
+      this.content = '';
+      this.image = null;
+      this.tags = [];
+      this.buttonText = 'פוסט נוצר!';
+      setTimeout(() => (this.buttonText = 'צור פוסט'), 3000);
+    })
   }
   uploadImage(e) {
     const file = e.target.files[0];
@@ -124,6 +134,25 @@ export class PostDashboardComponent
       );
       this.uploadPercent = task.percentageChanges();
     }
+  }
+  uploadImageTemp(e) {
+    const file = e.target.files[0];
+    const path = `posts/${file.name}`;
+    if (file.type.split('/')[0] !== 'image') {
+      return alert('רק תמונות');
+    } else {
+      const task = this._storage.upload(path, file);
+      task.then((a) =>
+        a.ref.getDownloadURL().then((url) => (this.uploadTempImage = url))
+      );
+      this.uploadTempPercent = task.percentageChanges();
+    }
+  }
+  copy() {
+    let copyText:any = document.getElementById('imageString');
+    copyText.select();
+    copyText.setSelectionRange(0,99999);
+    document.execCommand('copy');
   }
   saveProduct(product: Product) {
     this._product.create(product);

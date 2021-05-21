@@ -10,16 +10,17 @@
           name="title"
         />
       </mat-form-field>
-      <div style="width:300px">
+      <div style="width: 300px">
         <dx-tag-box
-                    [items]="tagsItems"
-                    [acceptCustomValue]="true"
-                    placeholder="תגיות"
-                    [rtlEnabled]="true"
-                    [(value)]="tags"
-                    [searchEnabled]="true"
-                    (onCustomItemCreating)="onCustomItemCreating($event)">
-                </dx-tag-box>
+          [items]="tagsItems"
+          [acceptCustomValue]="true"
+          placeholder="תגיות"
+          [rtlEnabled]="true"
+          [(value)]="tags"
+          [searchEnabled]="true"
+          (onCustomItemCreating)="onCustomItemCreating($event)"
+        >
+        </dx-tag-box>
       </div>
       <br />
       <!-- <mat-form-field> -->
@@ -116,15 +117,66 @@
   <div [hidden]="editing">
     <mat-card>
       <div style="display: flex; justify-content: center">
-        <img *ngIf="post.image" mat-card-image src="{{ post.image }}" alt="{{ post.title }}" />
+        <img
+          *ngIf="post.image"
+          mat-card-image
+          src="{{ post.image }}"
+          alt="{{ post.title }}"
+        />
       </div>
-      <h2 style="text-align: center;color: #000;">{{ post.title }}</h2>
+      <h2 style="text-align: center; color: #000">{{ post.title }}</h2>
       <p style="text-align: center">
         <small
           >נכתב ע"י {{ post.author }} &bull; ב
           {{ post.published.toMillis() | date: "dd/MM/yyyy HH:mm" }}</small
         >
       </p>
+      <div>
+        <div
+          class="
+            sharethis-inline-share-buttons
+            st-center st-inline-share-buttons st-animated
+          "
+          id="st-1"
+        >
+          <div
+            class="st-btn st-first"
+            data-network="facebook"
+            style="display: inline-block"
+          >
+            <img
+              alt="facebook sharing button"
+              src="https://platform-cdn.sharethis.com/img/facebook.svg"
+            />
+          </div>
+          <div
+            class="st-btn"
+            data-network="whatsapp"
+            style="display: inline-block"
+          >
+            <img
+              alt="whatsapp sharing button"
+              src="https://platform-cdn.sharethis.com/img/whatsapp.svg"
+            />
+          </div>
+          <div class="st-btn" data-network="sms" style="display: inline-block">
+            <img
+              alt="sms sharing button"
+              src="https://platform-cdn.sharethis.com/img/sms.svg"
+            />
+          </div>
+          <div
+            class="st-btn st-last"
+            data-network="telegram"
+            style="display: inline-block"
+          >
+            <img
+              alt="telegram sharing button"
+              src="https://platform-cdn.sharethis.com/img/telegram.svg"
+            />
+          </div>
+        </div>
+      </div>
       <mat-card-content>
         <div [innerHTML]="post.content | safeHtml"></div>
       </mat-card-content>
@@ -142,29 +194,44 @@
     </mat-card>
     <div *ngIf="post.comments">
       <mat-card *ngIf="post.comments.length > 0">
-        <h1 style="text-align: center;">תגובות</h1>
+        <h1 style="text-align: center">תגובות</h1>
         <div *ngFor="let comment of post.comments; let index = i">
-          <span>שם המגיב: <b>{{comment.name}}</b></span>
-          <br>
-          <blockquote style="background-color: #f9f9f9;">{{comment.content}}</blockquote>
+          <span
+            >שם המגיב: <b>{{ comment.name }}</b></span
+          >
+          <br />
+          <blockquote style="background-color: #f9f9f9">
+            {{ comment.content }}
+          </blockquote>
           <div *ngIf="_auth.afAuth.authState | async as user">
-            <button *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'" mat-icon-button (click)="deleteComment(i)">
+            <button
+              *ngIf="user.uid !== '2cXuXRRfYaaItvmuNZESMJUtpCb2'"
+              mat-icon-button
+              (click)="deleteComment(i)"
+            >
               <mat-icon>delete</mat-icon>
             </button>
           </div>
-          <div *ngIf="post.comments.length > 1" style="height: 1px; width: 100%; background-color: #00e676;"></div>
+          <div
+            *ngIf="post.comments.length > 1"
+            style="height: 1px; width: 100%; background-color: #00e676"
+          ></div>
         </div>
       </mat-card>
     </div>
     <mat-card>
-      <span style="font-size: 1.2em;">הגב לפוסט:</span>
-      <mat-form-field style="text-align: right;">
+      <span style="font-size: 1.2em">הגב לפוסט:</span>
+      <mat-form-field style="text-align: right">
         <mat-label>שם</mat-label>
-        <input matInput placeholder="שם" [(ngModel)]="comment.name">
+        <input matInput placeholder="שם" [(ngModel)]="comment.name" />
       </mat-form-field>
-      <mat-form-field style="text-align: right;">
+      <mat-form-field style="text-align: right">
         <mat-label>להשאיר תגובה</mat-label>
-        <textarea matInput placeholder="" [(ngModel)]="comment.content"></textarea>
+        <textarea
+          matInput
+          placeholder=""
+          [(ngModel)]="comment.content"
+        ></textarea>
       </mat-form-field>
       <div style="text-align: left">
         <button mat-raised-button (click)="updateComment()" color="primary">
@@ -175,16 +242,12 @@
   </div>
 </ng-container>
 <section *ngIf="!post">
-    <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_knnirj9a.json"  background="transparent"  speed="1"  style="width: 300px; height: 300px;"  loop  autoplay></lottie-player>
+  <lottie-player
+    src="https://assets10.lottiefiles.com/packages/lf20_knnirj9a.json"
+    background="transparent"
+    speed="1"
+    style="width: 300px; height: 300px"
+    loop
+    autoplay
+  ></lottie-player>
 </section>
-<div id="fixed_buttons" class="share_buttons">
-  <a class="facebook" (click)="share('facebook')" rel="nofollow noopener noreferrer">
-    <i class="fab fa-facebook-f"></i>
-  </a>
-  <a class="twitter" (click)="share('twitter')" rel="nofollow noopener noreferrer">
-    <i class="fab fa-twitter"></i>
-  </a>
-  <a aria-label="שתפו בwhatsApp" class="whatsapp" rel="nofollow noopener noreferrer" (click)="share('whatsapp')">
-    <i class="fab fa-whatsapp"></i>
-  </a>
-</div>

@@ -12,6 +12,6 @@ export class AuthGuardService implements CanActivate {
 
   constructor(private _auth: AuthService,private _user:UserService) { }
   canActivate(): Observable<boolean>{
-    return this._auth.user$.pipe(map(user => user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2'));
+    return this._auth.user$.pipe(map(user => user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' || user.uid == 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'));
   }
 }

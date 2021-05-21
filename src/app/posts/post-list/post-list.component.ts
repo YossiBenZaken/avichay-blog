@@ -48,7 +48,10 @@ export class PostListComponent implements OnInit {
     this.posts = this._posts.getPosts();
     this.posts.subscribe(p => {
       this.filteredPosts = p.slice(this.page ? (this.page - 1) * 10 : 0,this.page*10 || 10);
-      this.numOfPages = Math.floor(p.length / 10) + 1;
+      this.numOfPages = Math.floor(p.length / 10);
+      if((p.length % 10) != 0) {
+        this.numOfPages +=1;
+      }
     });
   }
   delete(id:string) {

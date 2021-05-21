@@ -10,17 +10,18 @@ span {
 }
 .mat-toolbar {
   height: 7vh;
+  position: fixed;
+  z-index: 9999;
 }
 .mat-sidenav-container {
 position: absolute;
   background-color: transparent;
-  min-height: 93vh !important;
 }
 .mat-sidenav {
   width: 50%;
   text-align: center;
   padding-top: 1rem;
 }
-.mat-sidenav-content {
-  height: 93vh !important;
+.shrink-toolbar {
+  height: 35px;
 }

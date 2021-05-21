@@ -10,6 +10,8 @@ body {
   font-family: "Rubik", "Helvetica Neue", sans-serif;
   overflow-y: hidden;
   background-color: #FFFEF3 !important;
+  background: url(https://firebasestorage.googleapis.com/v0/b/avichay-blog.appspot.com/o/backgrounds%2F1.jpeg?alt=media&token=ec3c9c40-8786-4e1a-8c50-0bf988df83da) no-repeat;
+    background-size: 100% 100%;
   scroll-behavior: smooth;
 }
 .mat-body,

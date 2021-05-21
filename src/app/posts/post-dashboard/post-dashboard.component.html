@@ -110,7 +110,7 @@
           <dxi-item formatName="insertColumnLeft"></dxi-item>
           <dxi-item formatName="insertColumnRight"></dxi-item>
           <dxi-item formatName="deleteColumn"></dxi-item>
-          <dxi-item formatName="variable"></dxi-item>
+          <dxi-item widget="dxButton" [options]="toolbarButtonOptions"></dxi-item>
         </dxo-toolbar>
         <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
       </dx-html-editor>
@@ -402,3 +402,26 @@
     </mat-expansion-panel>
   </mat-accordion>
 </section>
+<dx-popup [(visible)]="uploadImagePopUp">
+  <div>
+    <input
+      type="file"
+      name="file"
+      id="file"
+      (change)="uploadImageTemp($event)"
+      accept="image/png, image/jpeg"
+    />
+    <div [hidden]="!uploadTempPercent">
+      <mat-progress-bar
+        mode="determinate"
+        value="{{ uploadTempPercent | async }}"
+      ></mat-progress-bar>
+    </div>
+    <div [hidden]="!uploadTempImage" class="row">
+      <input [value]="uploadTempImage" id="imageString" class="col-6">
+      <button mat-icon-button (click)="copy()" class="col-6">
+        <mat-icon>content_copy</mat-icon>
+      </button>
+    </div>
+  </div>
+</dx-popup>

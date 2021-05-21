@@ -1,5 +1,5 @@
 <section *ngIf="filteredPosts" id="listOfPost" style="margin-bottom: 2em;">
-  <mat-form-field style="text-align: right;">
+  <mat-form-field class="mt-3" style="text-align: right;" color="warn">
     <mat-icon matPrefix>search</mat-icon>
     <input matInput type="search" placeholder="חפש פוסט או תגיות" class="search-input" (input)="filterPost()" [(ngModel)]="filter">
 </mat-form-field>

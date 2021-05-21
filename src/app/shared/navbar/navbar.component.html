@@ -1,59 +1,5 @@
 <div>
-  <mat-toolbar color="primary">
-    <div fxShow="true" fxHide.gt-sm="true">
-      <button mat-icon-button (click)="sidenav.toggle()">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </div>
-    <i class="fas fa-hat-wizard fa-lg"></i>
-    <span>&nbsp;</span>
-    <span routerLink="/blog" style="font-size: 1.5rem">מכשפה צבאית</span>
-    <span class="spacer"></span>
-    <div fxShow="true" fxHide.lt-md="true">
-      <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
-        <button mat-button routerLink="/store">החנות שלנו</button>
-        <button mat-icon-button routerLink="/check-out">
-          <mat-icon
-            matBadgeColor="warn"
-            *ngIf="cart$ | async as cart"
-            matBadge="{{ cart.totalItemsCount || '' }}"
-          >
-            shopping_cart
-          </mat-icon>
-        </button>
-        <button mat-button [matMenuTriggerFor]="menu">
-          {{ user.displayName }}
-          <mat-icon>arrow_drop_down</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button
-            mat-menu-item
-            *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2'"
-            routerLink="/dashboard"
-          >
-            ניהול בלוג
-          </button>
-          <button mat-menu-item routerLink="/my-orders">היסטוריית הזמנות</button>
-          <button mat-menu-item (click)="_auth.logout()">התנתק</button>
-        </mat-menu>
-      </div>
-      <ng-template #showLogin>
-        <button mat-button routerLink="/store">החנות שלנו</button>
-        <button mat-button (click)="_auth.login()">התחבר</button>
-      </ng-template>
-    </div>
-    <div fxShow="false" fxHide.lt-md="false">
-      <button mat-icon-button routerLink="/check-out">
-        <mat-icon
-          matBadgeColor="warn"
-          *ngIf="cart$ | async as cart"
-          matBadge="{{ cart.totalItemsCount || '' }}"
-        >
-          shopping_cart
-        </mat-icon>
-      </button>
-    </div>
-  </mat-toolbar>
+
   <mat-sidenav-container dir="rtl" fxFlexFill class="example-container">
     <mat-sidenav
       color="primary"
@@ -73,7 +19,7 @@
           <mat-menu #menu="matMenu">
             <button
               mat-menu-item
-              *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2'"
+              *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' || user.uid == 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'"
               routerLink="/dashboard"
               (click)="sidenav.toggle()"
             >
@@ -89,7 +35,64 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
-      <router-outlet></router-outlet>
+      <mat-toolbar color="primary">
+        <div fxShow="true" fxHide.gt-sm="true">
+          <button mat-icon-button (click)="sidenav.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+        </div>
+        <i class="fas fa-hat-wizard fa-lg"></i>
+        <span>&nbsp;</span>
+        <span routerLink="/blog" style="font-size: 1.5rem">מכשפה צבאית</span>
+        <span class="spacer"></span>
+        <div fxShow="true" fxHide.lt-md="true">
+          <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
+            <button mat-button routerLink="/store">החנות שלנו</button>
+            <button mat-icon-button routerLink="/check-out">
+              <mat-icon
+                matBadgeColor="warn"
+                *ngIf="cart$ | async as cart"
+                matBadge="{{ cart.totalItemsCount || '' }}"
+              >
+                shopping_cart
+              </mat-icon>
+            </button>
+            <button mat-button [matMenuTriggerFor]="menu">
+              {{ user.displayName }}
+              <mat-icon>arrow_drop_down</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button
+                mat-menu-item
+                *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' ||user.uid ==  'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'"
+                routerLink="/dashboard"
+              >
+                ניהול בלוג
+              </button>
+              <button mat-menu-item routerLink="/my-orders">היסטוריית הזמנות</button>
+              <button mat-menu-item (click)="_auth.logout()">התנתק</button>
+            </mat-menu>
+          </div>
+          <ng-template #showLogin>
+            <button mat-button routerLink="/store">החנות שלנו</button>
+            <button mat-button (click)="_auth.login()">התחבר</button>
+          </ng-template>
+        </div>
+        <div fxShow="false" fxHide.lt-md="false">
+          <button mat-icon-button routerLink="/check-out">
+            <mat-icon
+              matBadgeColor="warn"
+              *ngIf="cart$ | async as cart"
+              matBadge="{{ cart.totalItemsCount || '' }}"
+            >
+              shopping_cart
+            </mat-icon>
+          </button>
+        </div>
+      </mat-toolbar>
+      <div style="padding-top: 7vh;">
+        <router-outlet></router-outlet>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
