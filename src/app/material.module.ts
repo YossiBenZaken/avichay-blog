@@ -41,6 +41,7 @@ import { DxPopupModule} from 'devextreme-angular/ui/popup'
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatRadioModule } from '@angular/material/radio'
 import {
   MatPaginatorModule,
   MatPaginatorIntl,
@@ -59,6 +60,7 @@ import {
     MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
+    MatRadioModule,
     DxHtmlEditorModule,
     DxTagBoxModule,
     DxPieChartModule,

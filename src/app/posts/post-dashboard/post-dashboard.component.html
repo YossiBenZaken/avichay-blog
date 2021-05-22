@@ -401,6 +401,24 @@
       </div>
     </mat-expansion-panel>
   </mat-accordion>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> בחירת רקעים </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div class="container">
+          <mat-radio-group aria-label="Select an option" [(ngModel)]="selectedBackground">
+            <mat-radio-button *ngFor="let background of backgrounds$ | async; index as i" value="{{i}}" [checked]="selectedBackground == i" class="mx-1"><img [src]="background" class="background"/></mat-radio-button>
+          </mat-radio-group>
+        <div class="row text-center">
+          <div class="col">
+            <button mat-raised-button color="primary" (click)="saveBackground()">שמור רקע</button>
+          </div>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion>
 </section>
 <dx-popup [(visible)]="uploadImagePopUp">
   <div>

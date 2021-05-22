@@ -18,6 +18,9 @@ import { Title } from '@angular/platform-browser';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { SharedService } from 'src/app/shared/shared.service';
+import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
+import { MatRadioChange } from '@angular/material/radio';
 @Component({
   selector: 'app-post-dashboard',
   templateUrl: './post-dashboard.component.html',
@@ -53,9 +56,11 @@ export class PostDashboardComponent
   toolbarButtonOptions: any = {
     text: 'העלה תמונה',
     stylingMode: 'text',
-    onClick: () => this.uploadImagePopUp = true
-  }
-  uploadTempImage:string = null;
+    onClick: () => (this.uploadImagePopUp = true),
+  };
+  uploadTempImage: string = null;
+  backgrounds$;
+  selectedBackground;
   constructor(
     private _auth: AuthService,
     private _posts: PostService,
@@ -63,7 +68,8 @@ export class PostDashboardComponent
     private _title: Title,
     private _cat: CategoryService,
     private _product: ProductService,
-    private _order: OrderService
+    private _order: OrderService,
+    private _shared: SharedService
   ) {
     this.categories$ = _cat.getAll();
     this._title.setTitle('מכשפה צבאית - פאנל ניהול');
@@ -74,9 +80,9 @@ export class PostDashboardComponent
       this.dataSourceProducts.data = products;
     });
     this.subscriptionPosts = this._posts.getPosts().subscribe((posts) => {
-      posts.forEach(post => {
-        post.views = post.views ? post.views : 0
-      })
+      posts.forEach((post) => {
+        post.views = post.views ? post.views : 0;
+      });
       this.dataSourcePosts = posts;
     });
     this._posts
@@ -84,6 +90,10 @@ export class PostDashboardComponent
       .subscribe(
         (tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag)))
       );
+    this.backgrounds$ = this._shared.getBackgrounds();
+    this._shared.optionDoc.get().subscribe(option => {
+      this.selectedBackground = option.data().selected;
+    })
   }
   ngOnInit(): void {}
   ngAfterViewInit() {
@@ -101,7 +111,7 @@ export class PostDashboardComponent
     this.dataSource.filter = filterValue;
   }
   createPost() {
-    this._auth.user$.subscribe(user => {
+    this._auth.user$.subscribe((user) => {
       const data: Post = {
         author: user.displayName || user.email,
         authorID: user.uid,
@@ -120,7 +130,7 @@ export class PostDashboardComponent
       this.tags = [];
       this.buttonText = 'פוסט נוצר!';
       setTimeout(() => (this.buttonText = 'צור פוסט'), 3000);
-    })
+    });
   }
   uploadImage(e) {
     const file = e.target.files[0];
@@ -149,9 +159,9 @@ export class PostDashboardComponent
     }
   }
   copy() {
-    let copyText:any = document.getElementById('imageString');
+    let copyText: any = document.getElementById('imageString');
     copyText.select();
-    copyText.setSelectionRange(0,99999);
+    copyText.setSelectionRange(0, 99999);
     document.execCommand('copy');
   }
   saveProduct(product: Product) {
@@ -178,14 +188,23 @@ export class PostDashboardComponent
   }
   customizeTooltip(arg) {
     return {
-      text: arg.argumentText
-  };
+      text: arg.argumentText,
+    };
   }
   pointClick(e: any) {
     var point = e.target;
     point.showTooltip();
     setTimeout(() => {
       point.hideTooltip();
-    },2000)
-}
+    }, 2000);
+  }
+  saveBackground() {
+    this._shared.saveBackground({selected: Number(this.selectedBackground)});
+    this._shared.optionDoc.get().subscribe(result => {
+      let options = result.data();
+      document.body.style.background = `url(${options.background[options.selected]})`;
+      document.body.style.backgroundSize = '100% 100%';
+      document.body.style.backgroundRepeat = 'no-repeat';
+    })
+  }
 }
