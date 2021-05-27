@@ -143,6 +143,7 @@
             class="st-btn st-first"
             data-network="facebook"
             style="display: inline-block"
+            (click)="share('facebook')"
           >
             <img
               alt="facebook sharing button"
@@ -153,32 +154,38 @@
             class="st-btn"
             data-network="whatsapp"
             style="display: inline-block"
+            (click)="share('whatsapp')"
           >
             <img
               alt="whatsapp sharing button"
               src="https://platform-cdn.sharethis.com/img/whatsapp.svg"
             />
           </div>
-          <div class="st-btn" data-network="sms" style="display: inline-block">
-            <img
-              alt="sms sharing button"
-              src="https://platform-cdn.sharethis.com/img/sms.svg"
-            />
-          </div>
-          <div
-            class="st-btn st-last"
-            data-network="telegram"
-            style="display: inline-block"
-          >
-            <img
-              alt="telegram sharing button"
-              src="https://platform-cdn.sharethis.com/img/telegram.svg"
-            />
-          </div>
         </div>
       </div>
       <mat-card-content>
         <div [innerHTML]="post.content | safeHtml"></div>
+        <div
+          class="mt-2 pb-2 row"
+          style="font-size: 1rem; font-family: Rubik; color: #ffab40"
+        >
+          <div
+            *ngIf="nextPost"
+            class="col-6"
+            style="text-decoration: underline"
+            [routerLink]="['/blog', nextPost.id]"
+          >
+            <i class="fas fa-caret-right"></i> {{ nextPost.title }}
+          </div>
+          <div
+            *ngIf="prePost"
+            class="col-6"
+            style="text-align: left; text-decoration: underline"
+            [routerLink]="['/blog', prePost.id]"
+          >
+            {{ prePost.title }} <i class="fas fa-caret-left"></i>
+          </div>
+        </div>
       </mat-card-content>
       <mat-card-actions
         align="end"

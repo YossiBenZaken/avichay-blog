@@ -37,11 +37,13 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { DxHtmlEditorModule } from 'devextreme-angular/ui/html-editor';
 import { DxTagBoxModule } from 'devextreme-angular/ui/tag-box';
 import { DxPieChartModule } from 'devextreme-angular/ui/pie-chart';
-import { DxPopupModule} from 'devextreme-angular/ui/popup'
+import { DxPopupModule } from 'devextreme-angular/ui/popup';
+import { DxScrollViewModule } from 'devextreme-angular/ui/scroll-view';
+import { DxTemplateModule } from 'devextreme-angular';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatRadioModule } from '@angular/material/radio'
+import { MatRadioModule } from '@angular/material/radio';
 import {
   MatPaginatorModule,
   MatPaginatorIntl,
@@ -64,7 +66,9 @@ import {
     DxHtmlEditorModule,
     DxTagBoxModule,
     DxPieChartModule,
-    DxPopupModule
+    DxPopupModule,
+    DxScrollViewModule,
+    DxTemplateModule,
   ],
   imports: [
     MatButtonModule,

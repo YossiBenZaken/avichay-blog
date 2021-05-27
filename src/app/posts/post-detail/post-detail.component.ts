@@ -1,3 +1,4 @@
+import { Observable, Subscription } from 'rxjs';
 import { AuthService } from './../../core/auth.service';
 import { PostService } from './../post.service';
 import {
@@ -6,6 +7,11 @@ import {
   ViewEncapsulation,
   AfterViewInit,
   AfterViewChecked,
+  OnDestroy,
+  OnChanges,
+  SimpleChanges,
+  AfterContentChecked,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post, Comment } from '../post';
@@ -17,24 +23,53 @@ import { Meta, Title } from '@angular/platform-browser';
   styleUrls: ['./post-detail.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PostDetailComponent implements OnInit {
+export class PostDetailComponent implements OnInit, AfterViewInit {
   post: Post;
   editing: boolean = false;
   comment: Comment = new Comment();
   tags: string[];
-  tagsItems:string[];
+  tagsItems: string[];
+  prePost: Post;
+  nextPost: Post;
+  posts: Subscription;
+  routeId: string;
   constructor(
     private _route: ActivatedRoute,
     private _posts: PostService,
     public _auth: AuthService,
     private _router: Router,
     private _title: Title,
-    private _meta: Meta
-  ) {}
+    private _meta: Meta,
+    private _cd: ChangeDetectorRef
+  ) {
+    this.routeId = this._route.snapshot.paramMap.get('id');
+  }
 
   async ngOnInit() {
-    this._posts.getTags().subscribe(tags => this.tagsItems = tags.map((a:any) => a = a.tag));
+    this._posts
+      .getTags()
+      .subscribe(
+        (tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag)))
+      );
     await this.getPost();
+    this._router.routeReuseStrategy.shouldReuseRoute = () => false;
+  }
+  ngAfterViewInit() {
+    this._route.paramMap.subscribe(async (param) => {
+      const id = param.get('id');
+      this.posts = this._posts.getPosts().subscribe((p) => {
+        let posts = p;
+        const lengthOfPosts = p.length;
+        const thisPost = posts.filter((pf) => pf.id === id)[0];
+        const indexOfThisPost = posts.findIndex((p) => p == thisPost);
+        if (indexOfThisPost > 0) {
+          this.nextPost = p[indexOfThisPost - 1];
+        }
+        if (indexOfThisPost < lengthOfPosts) {
+          this.prePost = p[indexOfThisPost + 1];
+        }
+      });
+    });
   }
   getPost() {
     const id = this._route.snapshot.paramMap.get('id');
@@ -44,12 +79,12 @@ export class PostDetailComponent implements OnInit {
       .then((doc) => {
         if (doc.exists) {
           this.post = doc.data();
-          if(this.post.views) {
-            this.post.views +=1;
+          if (this.post.views) {
+            this.post.views += 1;
           } else {
             this.post.views = 1;
           }
-          this._posts.update(id,this.post);
+          this._posts.update(id, this.post);
           this._title.setTitle('מכשפה צבאית - ' + this.post.title);
           this._meta.updateTag({
             property: 'og:title',
@@ -65,22 +100,22 @@ export class PostDetailComponent implements OnInit {
               content: this.post.image,
             });
           }
-
         }
-      }).then(()=>{
+      })
+      .then(() => {
         setTimeout(() => {
           var span = document.getElementsByTagName('span');
-              Array.prototype.forEach.call(span, function (el) {
-                el.innerHTML = el.innerHTML.replace(/&nbsp;/gi, ' ');
-              });
-        },0);
+          Array.prototype.forEach.call(span, function (el) {
+            el.innerHTML = el.innerHTML.replace(/&nbsp;/gi, ' ');
+          });
+        }, 0);
       });
   }
   updatePost() {
     const formData = {
       title: this.post.title,
       content: this.post.content,
-      tags:this.tags
+      tags: this.tags,
     };
     const id = this._route.snapshot.paramMap.get('id');
     this._posts.update(id, formData);
@@ -120,11 +155,6 @@ export class PostDetailComponent implements OnInit {
     if (company === 'facebook') {
       window.open(
         'https://www.facebook.com/sharer/sharer.php?u=' + window.location.href,
-        '_blank'
-      );
-    } else if (company === 'twitter') {
-      window.open(
-        'https://twitter.com/intent/tweet?text=' + window.location.href,
         '_blank'
       );
     } else if (company === 'whatsapp') {

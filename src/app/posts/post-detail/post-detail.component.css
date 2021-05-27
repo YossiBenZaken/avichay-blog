@@ -12,50 +12,7 @@ mat-form-field {
   width: auto !important;
   max-width: 100%;
 }
-.share_button a {
-  font-size: 40px;
-  text-decoration: none;
-}
-#fixed_buttons {
-  position: fixed;
-  right: 0;
-  top: 100px;
-}
-#fixed_buttons a {
-  display: block;
-  height: 40px;
-  width: 40px;
-  text-align: center;
-  line-height: 40px;
-  color: #fff;
-  transition: all 0.3s;
-  box-sizing: content-box;
-  border-left-style: solid;
-  border-left-width: 0;
-}
-#fixed_buttons a:hover {
-  border-left-width: 5px;
-}
-#fixed_buttons a.facebook {
-  background: #3c5a99;
-  border-color: #3c5a99;
-}
-#fixed_buttons a.twitter {
-  background: #1DA1F2;
-  border-color: #1DA1F2;
-}
-#fixed_buttons a.linkedin {
-  background: #007bb5;
-  border-color: #007bb5;
-}
-#fixed_buttons a.google {
-  background: #db4437;
-  border-color: #db4437;
-}
-#fixed_buttons a.whatsapp {
-  background: #25d366;
-  border-color: #25d366;
-}
+
 section {
   display: flex;
   flex-direction: column;
@@ -66,4 +23,157 @@ section {
   grid-gap: 10px; */
   margin: 0 auto;
   max-width: 95%;
+}
+#st-1 {
+  font-family: "Helvetica Neue", Verdana, Helvetica, Arial, sans-serif;
+  direction: ltr;
+  display: block;
+  opacity: 1;
+  text-align: center;
+  z-index: 94034;
+}
+#st-1.st-animated {
+  -moz-transition: o 0.2s ease-in, p 0.2s ease-in, a 0.2s ease-in,
+    c 0.2s ease-in, i 0.2s ease-in, t 0.2s ease-in, y 0.2s ease-in;
+  -ms-transition: o 0.2s ease-in, p 0.2s ease-in, a 0.2s ease-in, c 0.2s ease-in,
+    i 0.2s ease-in, t 0.2s ease-in, y 0.2s ease-in;
+  -o-transition: o 0.2s ease-in, p 0.2s ease-in, a 0.2s ease-in, c 0.2s ease-in,
+    i 0.2s ease-in, t 0.2s ease-in, y 0.2s ease-in;
+  -webkit-transition: o 0.2s ease-in, p 0.2s ease-in, a 0.2s ease-in,
+    c 0.2s ease-in, i 0.2s ease-in, t 0.2s ease-in, y 0.2s ease-in;
+  transition: o 0.2s ease-in, p 0.2s ease-in, a 0.2s ease-in, c 0.2s ease-in,
+    i 0.2s ease-in, t 0.2s ease-in, y 0.2s ease-in;
+}
+#st-1.st-hidden {
+  opacity: 0;
+}
+#st-1.st-hide {
+  display: none;
+}
+#st-1 .st-btn {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  -moz-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+  -ms-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+  -o-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+  -webkit-transition: opacity 0.2s ease-in, top 0.2s ease-in;
+  transition: opacity 0.2s ease-in, top 0.2s ease-in;
+  -moz-border-radius: 11px;
+  -webkit-border-radius: 11px;
+  border-radius: 11px;
+  border: none;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 11px;
+  height: 32px;
+  line-height: 32px;
+  margin-right: 8px;
+  padding: 0 8px;
+  position: relative;
+  text-align: center;
+  top: 0;
+  vertical-align: top;
+  white-space: nowrap;
+}
+#st-1 .st-btn:last-child {
+  margin-right: 0;
+}
+#st-1 .st-btn > svg {
+  height: 16px;
+  width: 16px;
+  position: relative;
+  top: 8px;
+  vertical-align: top;
+}
+#st-1 .st-btn > img {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  position: relative;
+  top: 8px;
+  vertical-align: top;
+}
+#st-1 .st-btn > span {
+  -moz-transition: all 0.2s ease-in;
+  -ms-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  -webkit-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+  color: #fff;
+  display: inline-block;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  min-width: 60px;
+  opacity: 1;
+  padding: 0 6px;
+  position: relative;
+  vertical-align: top;
+}
+#st-1.st-has-labels .st-btn {
+  min-width: 120px;
+}
+#st-1.st-has-labels .st-btn.st-remove-label {
+  min-width: 50px;
+}
+#st-1.st-has-labels .st-btn.st-remove-label > span {
+  display: none;
+}
+#st-1.st-has-labels .st-btn.st-hide-label > span {
+  display: none;
+}
+#st-1 .st-total {
+  color: #555;
+  display: inline-block;
+  font-weight: 500;
+  line-height: 12px;
+  margin-right: 0;
+  max-width: 80px;
+  padding: 4px 8px;
+  text-align: center;
+}
+#st-1 .st-total.st-hidden {
+  display: none;
+}
+#st-1 .st-total > span {
+  font-size: 16px;
+  line-height: 17px;
+  display: block;
+  padding: 0;
+}
+#st-1 .st-total > span.st-shares {
+  font-size: 9px;
+  line-height: 9px;
+}
+#st-1.st-justified {
+  display: flex;
+  text-align: center;
+}
+#st-1.st-justified .st-btn {
+  -moz-flex: 1;
+  -ms-flex: 1;
+  -webkit-flex: 1;
+  flex: 1;
+}
+#st-1 .st-btn:hover {
+  opacity: 0.8;
+  top: -4px;
+}
+#st-1 .st-btn[data-network="facebook"] {
+  background-color: #4267b2;
+}
+#st-1 .st-btn[data-network="facebook"] svg {
+  fill: #fff;
+}
+#st-1 .st-btn[data-network="facebook"] > span {
+  color: #fff;
+}
+#st-1 .st-btn[data-network="whatsapp"] {
+  background-color: #25d366;
+}
+#st-1 .st-btn[data-network="whatsapp"] svg {
+  fill: #fff;
+}
+#st-1 .st-btn[data-network="whatsapp"] > span {
+  color: #fff;
 }
