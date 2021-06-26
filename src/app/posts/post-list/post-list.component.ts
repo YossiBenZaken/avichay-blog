@@ -63,6 +63,13 @@ export class PostListComponent implements OnInit {
     this.pagination = true;
     this.posts = this._posts.getPosts();
     this.posts.subscribe((p) => {
+      if (
+        !this._auth.autnticated ||
+        (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
+        this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
+        ){
+        p = p.filter((post) => post.draft == false);
+      }
       this.filteredPosts = p.slice(
         this.page ? (this.page - 1) * 10 : 0,
         this.page * 10 || 10
@@ -90,7 +97,16 @@ export class PostListComponent implements OnInit {
       );
     } else {
       this.pagination = true;
-      this.posts.subscribe((p) => (this.filteredPosts = p));
+      this.posts.subscribe((p) =>  {
+        if (
+          !this._auth.autnticated ||
+          (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
+          this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
+          ){
+          p = p.filter((post) => post.draft == false);
+        }
+        (this.filteredPosts = p);
+      });
     }
   }
   changePage(page) {

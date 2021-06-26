@@ -124,7 +124,7 @@
           alt="{{ post.title }}"
         />
       </div>
-      <h2 style="text-align: center; color: #000">{{ post.title }}</h2>
+      <h2 style="text-align: center; color: #000">{{ post.title }}{{post.draft ? '(טיוטה)' : ''}}</h2>
       <p style="text-align: center">
         <small
           >נכתב ע"י {{ post.author }} &bull; ב
@@ -247,6 +247,7 @@
       </div>
     </mat-card>
   </div>
+
 </ng-container>
 <section *ngIf="!post">
   <lottie-player

@@ -41,6 +41,7 @@ export class PostDashboardComponent
   categories$;
   product: Product = new Product();
   categoryF;
+  draft:boolean;
   id;
   subscription: Subscription;
   subscriptionProducts: Subscription;
@@ -122,6 +123,7 @@ export class PostDashboardComponent
         comments: [],
         views: 0,
         tags: this.tags,
+        draft: this.draft
       };
       this._posts.create(data);
       this.title = '';
