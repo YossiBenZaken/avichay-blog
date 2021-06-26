@@ -12,7 +12,7 @@
   </mat-form-field>
   <mat-card *ngFor="let post of filteredPosts">
     <mat-card-content style="text-align: center">
-      <h2 style="color: #000" routerLink="{{ post.id }}">{{ post.title }}</h2>
+      <h2 style="color: #000" routerLink="{{ post.id }}">{{ post.title }}{{post.draft ? '(טיוטה)':''}}</h2>
       <img
         *ngIf="post.image"
         src="{{ post.image }}"
@@ -49,6 +49,9 @@
     <mat-card-actions align="end" *ngIf="_auth.currentUserId === post.authorID">
       <button mat-icon-button (click)="delete(post.id)" color="warn">
         <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-icon-button (click)="visible(post.id,post.draft)" [color]="post.draft ? 'warn': 'primary'">
+        <mat-icon>visibility</mat-icon>
       </button>
     </mat-card-actions>
   </mat-card>

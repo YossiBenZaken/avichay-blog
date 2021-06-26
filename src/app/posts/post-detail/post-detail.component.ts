@@ -150,7 +150,14 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
     this._posts.delete(id);
     this._router.navigate(['/blog']);
   }
-
+  visible() {
+    this.post.draft = !this.post.draft;
+    const data = {
+      draft: this.post.draft
+    }
+    const id = this._route.snapshot.paramMap.get('id');
+    this._posts.update(id,data);
+  }
   share(company) {
     if (company === 'facebook') {
       window.open(

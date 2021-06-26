@@ -83,6 +83,12 @@ export class PostListComponent implements OnInit {
   delete(id: string) {
     this._posts.delete(id);
   }
+  visible(id:string,draft: boolean) {
+    const data = {
+      draft: !draft
+    }
+    this._posts.update(id,data);
+  }
   filterPost() {
     if (this.filter != '') {
       this.pagination = false;
