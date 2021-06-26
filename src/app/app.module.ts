@@ -13,6 +13,7 @@ import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PostsModule } from './posts/posts.module';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
 
 const routes: Routes = [
   { path: '', redirectTo: '/blog', pathMatch: 'full' },
@@ -35,6 +36,7 @@ const routes: Routes = [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireMessagingModule,
     AngularFireStorageModule,
     CoreModule,
     SharedModule,
