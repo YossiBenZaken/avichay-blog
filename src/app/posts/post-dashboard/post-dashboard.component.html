@@ -110,7 +110,10 @@
           <dxi-item formatName="insertColumnLeft"></dxi-item>
           <dxi-item formatName="insertColumnRight"></dxi-item>
           <dxi-item formatName="deleteColumn"></dxi-item>
-          <dxi-item widget="dxButton" [options]="toolbarButtonOptions"></dxi-item>
+          <dxi-item
+            widget="dxButton"
+            [options]="toolbarButtonOptions"
+          ></dxi-item>
         </dxo-toolbar>
         <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
       </dx-html-editor>
@@ -132,21 +135,22 @@
       </mat-expansion-panel-header>
       <div class="container">
         <dx-pie-chart
-        palette="bright"
-        [dataSource]="dataSourcePosts"
-        (onPointClick)="pointClick($event)">
-        <dxo-tooltip [enabled]="false" [zIndex]="5000" [customizeTooltip]="customizeTooltip"></dxo-tooltip>
-        <dxo-legend [visible]="false"></dxo-legend>
-        <dxi-series
-            argumentField="title"
-            valueField="views">
+          palette="bright"
+          [dataSource]="dataSourcePosts"
+          (onPointClick)="pointClick($event)"
+        >
+          <dxo-tooltip
+            [enabled]="false"
+            [zIndex]="5000"
+            [customizeTooltip]="customizeTooltip"
+          ></dxo-tooltip>
+          <dxo-legend [visible]="false"></dxo-legend>
+          <dxi-series argumentField="title" valueField="views">
             <dxo-label [visible]="true">
-                <dxo-connector
-                    [visible]="true"
-                    [width]="1"></dxo-connector>
+              <dxo-connector [visible]="true" [width]="1"></dxo-connector>
             </dxo-label>
-        </dxi-series>
-    </dx-pie-chart>
+          </dxi-series>
+        </dx-pie-chart>
       </div>
     </mat-expansion-panel>
   </mat-accordion>
@@ -408,12 +412,27 @@
       </mat-expansion-panel-header>
 
       <div class="container">
-          <mat-radio-group aria-label="Select an option" [(ngModel)]="selectedBackground">
-            <mat-radio-button *ngFor="let background of backgrounds$ | async; index as i" value="{{i}}" [checked]="selectedBackground == i" class="mx-1"><img [src]="background" class="background"/></mat-radio-button>
-          </mat-radio-group>
+        <mat-radio-group
+          aria-label="Select an option"
+          [(ngModel)]="selectedBackground"
+        >
+          <mat-radio-button
+            *ngFor="let background of backgrounds$ | async; index as i"
+            value="{{ i }}"
+            [checked]="selectedBackground == i"
+            class="mx-1"
+            ><img [src]="background" class="background"
+          /></mat-radio-button>
+        </mat-radio-group>
         <div class="row text-center">
           <div class="col">
-            <button mat-raised-button color="primary" (click)="saveBackground()">שמור רקע</button>
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="saveBackground()"
+            >
+              שמור רקע
+            </button>
           </div>
         </div>
       </div>
@@ -436,7 +455,7 @@
       ></mat-progress-bar>
     </div>
     <div [hidden]="!uploadTempImage" class="row">
-      <input [value]="uploadTempImage" id="imageString" class="col-6">
+      <input [value]="uploadTempImage" id="imageString" class="col-6" />
       <button mat-icon-button (click)="copy()" class="col-6">
         <mat-icon>content_copy</mat-icon>
       </button>

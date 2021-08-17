@@ -91,9 +91,9 @@ export class PostDashboardComponent
         (tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag)))
       );
     this.backgrounds$ = this._shared.getBackgrounds();
-    this._shared.optionDoc.get().subscribe(option => {
+    this._shared.optionDoc.get().subscribe((option) => {
       this.selectedBackground = option.data().selected;
-    })
+    });
   }
   ngOnInit(): void {}
   ngAfterViewInit() {
@@ -122,7 +122,7 @@ export class PostDashboardComponent
         comments: [],
         views: 0,
         tags: this.tags,
-        draft: true
+        draft: true,
       };
       this._posts.create(data);
       this.title = '';
@@ -200,12 +200,14 @@ export class PostDashboardComponent
     }, 2000);
   }
   saveBackground() {
-    this._shared.saveBackground({selected: Number(this.selectedBackground)});
-    this._shared.optionDoc.get().subscribe(result => {
+    this._shared.saveBackground({ selected: Number(this.selectedBackground) });
+    this._shared.optionDoc.get().subscribe((result) => {
       let options = result.data();
-      document.body.style.background = `url(${options.background[options.selected]})`;
+      document.body.style.background = `url(${
+        options.background[options.selected]
+      })`;
       document.body.style.backgroundSize = '100% 100%';
       document.body.style.backgroundRepeat = 'no-repeat';
-    })
+    });
   }
 }
