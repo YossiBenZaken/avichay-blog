@@ -1,5 +1,4 @@
 <div>
-
   <mat-sidenav-container dir="rtl" fxFlexFill class="example-container">
     <mat-sidenav
       color="primary"
@@ -11,7 +10,14 @@
     >
       <div fxLayout="column">
         <div *ngIf="_auth.afAuth.authState | async as user; else showLogin">
-          <button class="text-center fw-bold" mat-menu-item routerLink="/store" (click)="sidenav.toggle()">החנות שלנו</button>
+          <button
+            class="text-center fw-bold"
+            mat-menu-item
+            routerLink="/store"
+            (click)="sidenav.toggle()"
+          >
+            החנות שלנו
+          </button>
           <button mat-button [matMenuTriggerFor]="menu">
             {{ user.displayName }}
             <mat-icon>arrow_drop_down</mat-icon>
@@ -19,13 +25,22 @@
           <mat-menu #menu="matMenu">
             <button
               mat-menu-item
-              *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' || user.uid == 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'"
+              *ngIf="
+                user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' ||
+                user.uid == 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'
+              "
               routerLink="/dashboard"
               (click)="sidenav.toggle()"
             >
               ניהול בלוג
             </button>
-            <button mat-menu-item routerLink="/my-orders" (click)="sidenav.toggle()">היסטוריית הזמנות</button>
+            <button
+              mat-menu-item
+              routerLink="/my-orders"
+              (click)="sidenav.toggle()"
+            >
+              היסטוריית הזמנות
+            </button>
             <button mat-menu-item (click)="_auth.logout()">התנתק</button>
           </mat-menu>
         </div>
@@ -64,12 +79,17 @@
             <mat-menu #menu="matMenu">
               <button
                 mat-menu-item
-                *ngIf="user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' ||user.uid ==  'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'"
+                *ngIf="
+                  user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' ||
+                  user.uid == 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'
+                "
                 routerLink="/dashboard"
               >
                 ניהול בלוג
               </button>
-              <button mat-menu-item routerLink="/my-orders">היסטוריית הזמנות</button>
+              <button mat-menu-item routerLink="/my-orders">
+                היסטוריית הזמנות
+              </button>
               <button mat-menu-item (click)="_auth.logout()">התנתק</button>
             </mat-menu>
           </div>
@@ -90,9 +110,7 @@
           </button>
         </div>
       </mat-toolbar>
-      <div style="padding-top: 7vh;">
-        <router-outlet></router-outlet>
-      </div>
+      <router-outlet></router-outlet>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

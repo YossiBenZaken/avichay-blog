@@ -1,0 +1,39 @@
+<div class="grid-container">
+  <app-dashboard-nav></app-dashboard-nav>
+  <mat-grid-list cols="2" rowHeight="300px">
+    <mat-grid-tile colspan="1" rowspan="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title> בחירת רקעים </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div class="container">
+            <mat-radio-group
+              aria-label="Select an option"
+              [(ngModel)]="selectedBackground"
+            >
+              <mat-radio-button
+                *ngFor="let background of backgrounds$ | async; index as i"
+                value="{{ i }}"
+                [checked]="selectedBackground == i"
+                class="mx-1"
+                ><img [src]="background" class="background"
+              /></mat-radio-button>
+            </mat-radio-group>
+            <div class="row text-center">
+              <div class="col">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="saveBackground()"
+                >
+                  שמור רקע
+                </button>
+              </div>
+            </div>
+          </div></mat-card-content
+        >
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

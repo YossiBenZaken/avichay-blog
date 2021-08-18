@@ -1,444 +1,140 @@
-<section>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> צור פוסט חדש </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div>
-        <input
-          type="file"
-          name="file"
-          id="file"
-          (change)="uploadImage($event)"
-          accept="image/png, image/jpeg"
-        />
-        <div [hidden]="!uploadPercent">
-          <mat-progress-bar
-            mode="determinate"
-            value="{{ uploadPercent | async }}"
-          ></mat-progress-bar>
-        </div>
-        <div [hidden]="!image">
-          <img [src]="image || '//:0'" />
-        </div>
-      </div>
-
-      <mat-form-field style="text-align: right; width: 300px">
-        <input matInput placeholder="כותרת הפוסט" [(ngModel)]="title" />
-      </mat-form-field>
-      <div style="width: 300px" class="mb-4">
-        <dx-tag-box
-          [items]="tagsItems"
-          [acceptCustomValue]="true"
-          placeholder="תגיות"
-          [rtlEnabled]="true"
-          [(value)]="tags"
-          [searchEnabled]="true"
-          (onCustomItemCreating)="onCustomItemCreating($event)"
-        >
-        </dx-tag-box>
-      </div>
-      <dx-html-editor height="725px" [(value)]="content">
-        <dxo-toolbar [multiline]="true">
-          <dxi-item formatName="undo"></dxi-item>
-          <dxi-item formatName="redo"></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item
-            formatName="size"
-            [formatValues]="[
-              '8pt',
-              '10pt',
-              '12pt',
-              '14pt',
-              '18pt',
-              '24pt',
-              '36pt'
-            ]"
-          ></dxi-item>
-          <dxi-item
-            formatName="font"
-            [formatValues]="[
-              'Arial',
-              'Courier New',
-              'Georgia',
-              'Impact',
-              'Lucida Console',
-              'Tahoma',
-              'Times New Roman',
-              'Verdana'
-            ]"
-          ></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item formatName="bold"></dxi-item>
-          <dxi-item formatName="italic"></dxi-item>
-          <dxi-item formatName="strike"></dxi-item>
-          <dxi-item formatName="underline"></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item
-            formatName="align"
-            [formatValues]="['left', 'right', 'center', 'justify']"
-          ></dxi-item>
-          <dxi-item formatName="increaseIndent"></dxi-item>
-          <dxi-item formatName="decreaseIndent"></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item formatName="orderedList"></dxi-item>
-          <dxi-item formatName="bulletList"></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item formatName="subscript"></dxi-item>
-          <dxi-item formatName="superscript"></dxi-item>
-          <dxi-item
-            formatName="header"
-            [formatValues]="[false, 1, 2, 3, 4, 5, 6]"
-          ></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item formatName="color"></dxi-item>
-          <dxi-item formatName="background"></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item formatName="link"></dxi-item>
-          <dxi-item formatName="image"></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item formatName="clear"></dxi-item>
-          <dxi-item formatName="codeBlock"></dxi-item>
-          <dxi-item formatName="blockquote"></dxi-item>
-          <dxi-item formatName="separator"></dxi-item>
-          <dxi-item formatName="insertTable"></dxi-item>
-          <dxi-item formatName="deleteTable"></dxi-item>
-          <dxi-item formatName="insertRowAbove"></dxi-item>
-          <dxi-item formatName="insertRowBelow"></dxi-item>
-          <dxi-item formatName="deleteRow"></dxi-item>
-          <dxi-item formatName="insertColumnLeft"></dxi-item>
-          <dxi-item formatName="insertColumnRight"></dxi-item>
-          <dxi-item formatName="deleteColumn"></dxi-item>
-          <dxi-item
-            widget="dxButton"
-            [options]="toolbarButtonOptions"
-          ></dxi-item>
-        </dxo-toolbar>
-        <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
-      </dx-html-editor>
-      <br />
-      <button
-        mat-raised-button
-        color="accent"
-        (click)="createPost()"
-        [disabled]="!title || !content"
-      >
-        {{ buttonText }}
-      </button>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> סטטיסטיקות </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="container">
-        <dx-pie-chart
-          palette="bright"
-          [dataSource]="dataSourcePosts"
-          (onPointClick)="pointClick($event)"
-        >
-          <dxo-tooltip
-            [enabled]="false"
-            [zIndex]="5000"
-            [customizeTooltip]="customizeTooltip"
-          ></dxo-tooltip>
-          <dxo-legend [visible]="false"></dxo-legend>
-          <dxi-series argumentField="title" valueField="views">
-            <dxo-label [visible]="true">
-              <dxo-connector [visible]="true" [width]="1"></dxo-connector>
-            </dxo-label>
-          </dxi-series>
-        </dx-pie-chart>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> הוסף קטגוריה </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div class="row">
-        <div class="col-md-12">
-          <form #fcat="ngForm" (ngSubmit)="saveCategory(fcat.value)">
-            <div class="form-group">
-              <label for="name">קטגוריה</label>
+<div class="grid-container">
+  <app-dashboard-nav></app-dashboard-nav>
+  <mat-grid-list cols="1">
+    <mat-grid-tile colspan="1" rowspan="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title> צור פוסט חדש </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <div class="row">
+            <div class="col-4">
               <input
-                #titleCat="ngModel"
-                [(ngModel)]="categoryF"
-                name="name"
-                id="name"
-                type="text"
-                class="form-control"
-                required
+                type="file"
+                name="file"
+                id="file"
+                style="margin-top: 0.5em"
+                (change)="uploadImage($event)"
+                accept="image/png, image/jpeg"
               />
-              <div
-                class="alert alert-danger"
-                *ngIf="titleCat.touched && titleCat.invalid"
-              >
-                שם קטגוריה חובה
+              <div [hidden]="!uploadPercent">
+                <mat-progress-bar
+                  mode="determinate"
+                  value="{{ uploadPercent | async }}"
+                ></mat-progress-bar>
               </div>
             </div>
-            <button class="btn btn-primary">שמור</button>
-          </form>
-        </div>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> הוסף מוצר לחנות </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div class="row">
-        <div class="col-md-6">
-          <form #f="ngForm" (ngSubmit)="saveProduct(f.value)">
-            <div class="form-group">
-              <label for="title">שם מוצר</label>
-              <input
-                #titleProduct="ngModel"
-                [(ngModel)]="product.title"
-                name="title"
-                id="title"
-                type="text"
-                class="form-control"
-                required
-              />
-              <div
-                class="alert alert-danger"
-                *ngIf="titleProduct.touched && titleProduct.invalid"
-              >
-                Title is required.
-              </div>
+            <div class="col-4">
+              <mat-form-field appearance="outline" style="text-align: right">
+                <mat-label>כותרת הפוסט</mat-label>
+                <input matInput placeholder="" [(ngModel)]="title" />
+              </mat-form-field>
             </div>
-            <div class="form-group">
-              <label for="price">מחיר</label>
-              <div class="input-group mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">₪</span>
-                </div>
-                <input
-                  #price="ngModel"
-                  [(ngModel)]="product.price"
-                  name="price"
-                  id="price"
-                  type="number"
-                  class="form-control"
-                  required
-                  [min]="0"
-                />
-              </div>
-              <div
-                class="alert alert-danger"
-                *ngIf="price.touched && price.invalid"
+            <div class="col-4">
+              <dx-tag-box
+                [items]="tagsItems"
+                [acceptCustomValue]="true"
+                placeholder="תגיות"
+                [rtlEnabled]="true"
+                [(value)]="tags"
+                [searchEnabled]="true"
+                (onCustomItemCreating)="onCustomItemCreating($event)"
               >
-                <div *ngIf="price.errors.required">Price is required.</div>
-                <div *ngIf="price.errors.min">Price should be 0 or higher.</div>
-              </div>
+              </dx-tag-box>
             </div>
-            <div class="form-group">
-              <label for="category">קטגוריה</label>
-              <select
-                #category="ngModel"
-                [(ngModel)]="product.category"
-                name="category"
-                id="category"
-                class="form-control"
-                required
-              >
-                <option value=""></option>
-                <option *ngFor="let c of categories$ | async" [value]="c.id">
-                  {{ c.name }}
-                </option>
-              </select>
-              <div
-                class="alert alert-danger"
-                *ngIf="category.touched && category.invalid"
-              >
-                Category is required.
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="image">תמונה</label>
-              <input
-                #imageUrl="ngModel"
-                [(ngModel)]="product.image"
-                name="image"
-                id="image"
-                type="text"
-                class="form-control"
-                required
-                url
-              />
-              <div
-                class="alert alert-danger"
-                *ngIf="imageUrl.touched && imageUrl.invalid"
-              >
-                <div *ngIf="imageUrl.errors.required">
-                  Image URL is required.
-                </div>
-                <div *ngIf="imageUrl.errors.url">Please enter a valid URL.</div>
-              </div>
-            </div>
-            <button class="btn btn-primary">שמור</button>
-          </form>
-        </div>
-        <div class="col-md-6">
-          <app-product-card
-            [product]="product"
-            [show-actions]="false"
-          ></app-product-card>
-        </div>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> הזמנות שבוצעו </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div class="row">
-        <div class="col">
-          <button mat-raised-button routerLink="/store" color="primary">
-            הזמנה חדשה
-          </button>
-        </div>
-      </div>
-
-      <div class="table-container mat-elevation-z3">
-        <div class="table-header">
-          <mat-form-field>
-            <input
-              matInput
-              (keyup)="applyFilter($event.target.value)"
-              placeholder="חפש..."
-            />
-          </mat-form-field>
-        </div>
-
-        <mat-table #table [dataSource]="dataSource">
-          <!-- Title Column -->
-          <ng-container matColumnDef="name">
-            <mat-header-cell *matHeaderCellDef>שם לקוח</mat-header-cell>
-            <mat-cell *matCellDef="let order">{{
-              order.shipping.name
-            }}</mat-cell>
-          </ng-container>
-
-          <!-- Price Column -->
-          <ng-container matColumnDef="date">
-            <mat-header-cell *matHeaderCellDef>תאריך הזמנה</mat-header-cell>
-            <mat-cell *matCellDef="let order">
-              {{ order.datePlaced | date }}
-            </mat-cell>
-          </ng-container>
-
-          <!-- Edit Column -->
-          <ng-container matColumnDef="orderNumber">
-            <mat-header-cell *matHeaderCellDef>מספר הזמנה</mat-header-cell>
-            <mat-cell *matCellDef="let order"> {{ order.id }}</mat-cell>
-          </ng-container>
-
-          <!-- Edit Column -->
-          <ng-container matColumnDef="view">
-            <mat-header-cell *matHeaderCellDef></mat-header-cell>
-            <mat-cell *matCellDef="let order"
-              ><a [routerLink]="['/view-order/', order.id]"
-                >ראה הזמנה</a
-              ></mat-cell
-            >
-          </ng-container>
-
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row>
-        </mat-table>
-
-        <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 50, 100]">
-        </mat-paginator>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> ניהול מוצרים </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div class="container">
-        <div class="table-container mat-elevation-z3">
-          <mat-table [dataSource]="dataSourceProducts">
-            <!-- Title Column -->
-            <ng-container matColumnDef="title">
-              <mat-header-cell *matHeaderCellDef> שם מוצר </mat-header-cell>
-              <mat-cell *matCellDef="let product">{{ product.title }}</mat-cell>
-            </ng-container>
-
-            <!-- Price Column -->
-            <ng-container matColumnDef="price">
-              <mat-header-cell *matHeaderCellDef> מחיר </mat-header-cell>
-              <mat-cell *matCellDef="let product">
-                {{ product.price | currency: "₪":true }}
-              </mat-cell>
-            </ng-container>
-
-            <!-- Edit Column -->
-            <ng-container matColumnDef="edit">
-              <mat-header-cell *matHeaderCellDef></mat-header-cell>
-              <mat-cell *matCellDef="let product"
-                ><a [routerLink]="['/edit-product/', product.id]"
-                  >עריכה</a
-                ></mat-cell
-              >
-            </ng-container>
-
-            <mat-header-row
-              *matHeaderRowDef="displayedPColumns"
-            ></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedPColumns">
-            </mat-row>
-          </mat-table>
-        </div>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-  <mat-accordion>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title> בחירת רקעים </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <div class="container">
-        <mat-radio-group
-          aria-label="Select an option"
-          [(ngModel)]="selectedBackground"
-        >
-          <mat-radio-button
-            *ngFor="let background of backgrounds$ | async; index as i"
-            value="{{ i }}"
-            [checked]="selectedBackground == i"
-            class="mx-1"
-            ><img [src]="background" class="background"
-          /></mat-radio-button>
-        </mat-radio-group>
-        <div class="row text-center">
-          <div class="col">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="saveBackground()"
-            >
-              שמור רקע
-            </button>
           </div>
-        </div>
-      </div>
-    </mat-expansion-panel>
-  </mat-accordion>
-</section>
+          <dx-html-editor height="725px" [(value)]="content">
+            <dxo-toolbar [multiline]="true">
+              <dxi-item formatName="undo"></dxi-item>
+              <dxi-item formatName="redo"></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item
+                formatName="size"
+                [formatValues]="[
+                  '8pt',
+                  '10pt',
+                  '12pt',
+                  '14pt',
+                  '18pt',
+                  '24pt',
+                  '36pt'
+                ]"
+              ></dxi-item>
+              <dxi-item
+                formatName="font"
+                [formatValues]="[
+                  'Arial',
+                  'Courier New',
+                  'Georgia',
+                  'Impact',
+                  'Lucida Console',
+                  'Tahoma',
+                  'Times New Roman',
+                  'Verdana'
+                ]"
+              ></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item formatName="bold"></dxi-item>
+              <dxi-item formatName="italic"></dxi-item>
+              <dxi-item formatName="strike"></dxi-item>
+              <dxi-item formatName="underline"></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item
+                formatName="align"
+                [formatValues]="['left', 'right', 'center', 'justify']"
+              ></dxi-item>
+              <dxi-item formatName="increaseIndent"></dxi-item>
+              <dxi-item formatName="decreaseIndent"></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item formatName="orderedList"></dxi-item>
+              <dxi-item formatName="bulletList"></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item formatName="subscript"></dxi-item>
+              <dxi-item formatName="superscript"></dxi-item>
+              <dxi-item
+                formatName="header"
+                [formatValues]="[false, 1, 2, 3, 4, 5, 6]"
+              ></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item formatName="color"></dxi-item>
+              <dxi-item formatName="background"></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item formatName="link"></dxi-item>
+              <dxi-item formatName="image"></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item formatName="clear"></dxi-item>
+              <dxi-item formatName="codeBlock"></dxi-item>
+              <dxi-item formatName="blockquote"></dxi-item>
+              <dxi-item formatName="separator"></dxi-item>
+              <dxi-item formatName="insertTable"></dxi-item>
+              <dxi-item formatName="deleteTable"></dxi-item>
+              <dxi-item formatName="insertRowAbove"></dxi-item>
+              <dxi-item formatName="insertRowBelow"></dxi-item>
+              <dxi-item formatName="deleteRow"></dxi-item>
+              <dxi-item formatName="insertColumnLeft"></dxi-item>
+              <dxi-item formatName="insertColumnRight"></dxi-item>
+              <dxi-item formatName="deleteColumn"></dxi-item>
+              <dxi-item
+                widget="dxButton"
+                [options]="toolbarButtonOptions"
+              ></dxi-item>
+            </dxo-toolbar>
+            <dxo-media-resizing [enabled]="true"> </dxo-media-resizing>
+          </dx-html-editor>
+          <br />
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="createPost()"
+            [disabled]="!title || !content"
+          >
+            {{ buttonText }}
+          </button>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
 <dx-popup [(visible)]="uploadImagePopUp">
   <div>
     <input

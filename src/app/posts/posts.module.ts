@@ -10,11 +10,40 @@ import { PostDashboardComponent } from './post-dashboard/post-dashboard.componen
 import { PostDetailComponent } from './post-detail/post-detail.component';
 import { PostListComponent } from './post-list/post-list.component';
 import { AuthGuardService } from '../shared/auth-guard.service';
+import { DashboardStatsComponent } from './dashboard-stats/dashboard-stats.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { LayoutModule } from '@angular/cdk/layout';
+import { DashboardNavComponent } from './dashboard-nav/dashboard-nav.component';
+import { DashboardStoreComponent } from './dashboard-store/dashboard-store.component';
+import { DashboardSettingsComponent } from './dashboard-settings/dashboard-setting.component';
 
 const routes: Routes = [
   { path: 'blog', component: PostListComponent },
   { path: 'blog/:id', component: PostDetailComponent },
-  { path: 'dashboard', component: PostDashboardComponent,canActivate: [AuthGuardService] },
+  {
+    path: 'dashboard',
+    component: DashboardStatsComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'dashboard/store',
+    component: DashboardStoreComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'dashboard/settings',
+    component: DashboardSettingsComponent,
+    canActivate: [AuthGuardService],
+  },
+  {
+    path: 'dashboard/posts',
+    component: PostDashboardComponent,
+    canActivate: [AuthGuardService],
+  },
 ];
 
 @NgModule({
@@ -22,10 +51,24 @@ const routes: Routes = [
     PostDashboardComponent,
     PostDetailComponent,
     PostListComponent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
+    DashboardStatsComponent,
+    DashboardNavComponent,
+    DashboardStoreComponent,
+    DashboardSettingsComponent,
   ],
-  imports: [SharedModule, RouterModule.forChild(routes),StoreModule],
-  providers: [PostService,ProductService,CategoryService],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA]
+  imports: [
+    SharedModule,
+    RouterModule.forChild(routes),
+    StoreModule,
+    MatGridListModule,
+    MatCardModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    LayoutModule,
+  ],
+  providers: [PostService, ProductService, CategoryService],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PostsModule {}

@@ -1,5 +1,5 @@
 import { StoreModule } from './store/store.module';
-import { Routes, RouterModule, ɵROUTER_PROVIDERS } from '@angular/router';
+import { ɵROUTER_PROVIDERS } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
@@ -12,23 +12,9 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PostsModule } from './posts/posts.module';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
+import { AppRoutingModule } from './app-routing.module';
 
-const routes: Routes = [
-  { path: '', redirectTo: '/blog', pathMatch: 'full' },
-  {
-    path: '',
-    loadChildren: () =>
-      import('./posts/posts.module').then((m) => m.PostsModule),
-  },
-  {
-    path: '',
-    loadChildren: () =>
-      import('./store/store.module').then((m) => m.StoreModule),
-  },
-  { path: '**', redirectTo: '/blog', pathMatch: 'full' },
-];
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -43,7 +29,7 @@ const routes: Routes = [
     BrowserAnimationsModule,
     PostsModule,
     StoreModule,
-    RouterModule.forRoot(routes),
+    AppRoutingModule,
   ],
   providers: [ɵROUTER_PROVIDERS],
   bootstrap: [AppComponent],

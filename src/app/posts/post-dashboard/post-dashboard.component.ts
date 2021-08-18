@@ -1,34 +1,20 @@
 import { OrderService } from './../../store/order.service';
-import { Product } from './../../store/models/product';
 import { ProductService } from './../../store/product.service';
 import { CategoryService } from './../../store/category.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { PostService } from './../post.service';
 import { AuthService } from './../../core/auth.service';
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  OnDestroy,
-  AfterViewInit,
-} from '@angular/core';
+import { Component } from '@angular/core';
 import { Post } from '../post';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Title } from '@angular/platform-browser';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
 import { SharedService } from 'src/app/shared/shared.service';
-import { TOUCH_BUFFER_MS } from '@angular/cdk/a11y';
-import { MatRadioChange } from '@angular/material/radio';
 @Component({
   selector: 'app-post-dashboard',
   templateUrl: './post-dashboard.component.html',
   styleUrls: ['./post-dashboard.component.css'],
 })
-export class PostDashboardComponent
-  implements OnInit, OnDestroy, AfterViewInit
-{
+export class PostDashboardComponent {
   title: string;
   image: string = null;
   content: string;
@@ -38,77 +24,27 @@ export class PostDashboardComponent
   uploadPercent: Observable<number>;
   uploadTempPercent: Observable<number>;
   downloadURL: Promise<any>;
-  categories$;
-  product: Product = new Product();
-  categoryF;
   id;
-  subscription: Subscription;
-  subscriptionProducts: Subscription;
-  subscriptionPosts: Subscription;
-  displayedColumns = ['name', 'date', 'orderNumber', 'view'];
-  displayedPColumns = ['title', 'price', 'edit'];
-  dataSource = new MatTableDataSource();
-  dataSourceProducts = new MatTableDataSource();
-  dataSourcePosts;
   uploadImagePopUp: boolean;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
   toolbarButtonOptions: any = {
     text: 'העלה תמונה',
     stylingMode: 'text',
     onClick: () => (this.uploadImagePopUp = true),
   };
   uploadTempImage: string = null;
-  backgrounds$;
-  selectedBackground;
   constructor(
     private _auth: AuthService,
     private _posts: PostService,
     private _storage: AngularFireStorage,
     private _title: Title,
-    private _cat: CategoryService,
-    private _product: ProductService,
-    private _order: OrderService,
-    private _shared: SharedService
+    private _product: ProductService
   ) {
-    this.categories$ = _cat.getAll();
     this._title.setTitle('מכשפה צבאית - פאנל ניהול');
-    this.subscription = this._order.getOrders().subscribe((orders) => {
-      this.dataSource.data = orders;
-    });
-    this.subscriptionProducts = this._product.getAll().subscribe((products) => {
-      this.dataSourceProducts.data = products;
-    });
-    this.subscriptionPosts = this._posts.getPosts().subscribe((posts) => {
-      posts.forEach((post) => {
-        post.views = post.views ? post.views : 0;
-      });
-      this.dataSourcePosts = posts;
-    });
     this._posts
       .getTags()
       .subscribe(
         (tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag)))
       );
-    this.backgrounds$ = this._shared.getBackgrounds();
-    this._shared.optionDoc.get().subscribe((option) => {
-      this.selectedBackground = option.data().selected;
-    });
-  }
-  ngOnInit(): void {}
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
-    this.subscriptionPosts.unsubscribe();
-    this.subscriptionProducts.unsubscribe();
-  }
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
   }
   createPost() {
     this._auth.user$.subscribe((user) => {
@@ -165,17 +101,6 @@ export class PostDashboardComponent
     copyText.setSelectionRange(0, 99999);
     document.execCommand('copy');
   }
-  saveProduct(product: Product) {
-    this._product.create(product);
-    this.product.title = '';
-    this.product.category = '';
-    this.product.image = '';
-    this.product.price = 0;
-  }
-  saveCategory(category) {
-    this._cat.catCollection.add(category);
-    this.categoryF = '';
-  }
   delete() {
     if (!confirm('האם אתה בטוח שאתה רוצה למחוק את המוצר הזה?')) {
       return;
@@ -186,28 +111,5 @@ export class PostDashboardComponent
     let newValue = args.text;
     this._posts.createTag({ tag: newValue });
     args.customItem = newValue;
-  }
-  customizeTooltip(arg) {
-    return {
-      text: arg.argumentText,
-    };
-  }
-  pointClick(e: any) {
-    var point = e.target;
-    point.showTooltip();
-    setTimeout(() => {
-      point.hideTooltip();
-    }, 2000);
-  }
-  saveBackground() {
-    this._shared.saveBackground({ selected: Number(this.selectedBackground) });
-    this._shared.optionDoc.get().subscribe((result) => {
-      let options = result.data();
-      document.body.style.background = `url(${
-        options.background[options.selected]
-      })`;
-      document.body.style.backgroundSize = '100% 100%';
-      document.body.style.backgroundRepeat = 'no-repeat';
-    });
   }
 }

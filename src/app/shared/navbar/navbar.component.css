@@ -10,11 +10,12 @@ span {
 }
 .mat-toolbar {
   height: 7vh;
-  position: fixed;
+  position: sticky;
   z-index: 9999;
+  top: 0;
 }
 .mat-sidenav-container {
-position: absolute;
+  position: absolute;
   background-color: transparent;
 }
 .mat-sidenav {

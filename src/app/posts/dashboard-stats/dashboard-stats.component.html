@@ -1,0 +1,31 @@
+<div class="grid-container">
+  <app-dashboard-nav></app-dashboard-nav>
+  <mat-grid-list cols="2" rowHeight="500px">
+    <mat-grid-tile colspan="1" rowspan="1">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title> סטטיסטיקות </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          <dx-pie-chart
+            palette="bright"
+            [dataSource]="dataSource"
+            (onPointClick)="pointClick($event)"
+          >
+            <dxo-tooltip
+              [enabled]="false"
+              [zIndex]="5000"
+              [customizeTooltip]="customizeTooltip"
+            ></dxo-tooltip>
+            <dxo-legend [visible]="false"></dxo-legend>
+            <dxi-series argumentField="title" valueField="views">
+              <dxo-label [visible]="true">
+                <dxo-connector [visible]="true" [width]="1"></dxo-connector>
+              </dxo-label>
+            </dxi-series>
+          </dx-pie-chart>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
