@@ -66,4 +66,7 @@ export class DashboardStoreComponent implements OnDestroy, AfterViewInit {
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
+  Device() {
+    return innerWidth > 450 ? 1 : 2;
+  }
 }

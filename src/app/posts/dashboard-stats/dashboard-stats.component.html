@@ -1,7 +1,7 @@
 <div class="grid-container">
   <app-dashboard-nav></app-dashboard-nav>
   <mat-grid-list cols="2" rowHeight="500px">
-    <mat-grid-tile colspan="1" rowspan="1">
+    <mat-grid-tile [colspan]="Device()" rowspan="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title> סטטיסטיקות </mat-card-title>

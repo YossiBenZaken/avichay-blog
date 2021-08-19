@@ -1,14 +1,14 @@
 <div class="grid-container">
   <app-dashboard-nav></app-dashboard-nav>
-  <mat-grid-list cols="1">
+  <mat-grid-list cols="1" rowHeight="1000px">
     <mat-grid-tile colspan="1" rowspan="1">
       <mat-card class="dashboard-card">
         <mat-card-header>
           <mat-card-title> צור פוסט חדש </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          <div class="row">
-            <div class="col-4">
+          <div class="row mb-2">
+            <div class="col-md-4">
               <input
                 type="file"
                 name="file"
@@ -24,13 +24,13 @@
                 ></mat-progress-bar>
               </div>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
               <mat-form-field appearance="outline" style="text-align: right">
                 <mat-label>כותרת הפוסט</mat-label>
                 <input matInput placeholder="" [(ngModel)]="title" />
               </mat-form-field>
             </div>
-            <div class="col-4">
+            <div class="col-md-4">
               <dx-tag-box
                 [items]="tagsItems"
                 [acceptCustomValue]="true"

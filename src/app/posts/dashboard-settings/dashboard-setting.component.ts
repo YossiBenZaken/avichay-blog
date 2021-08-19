@@ -35,4 +35,7 @@ export class DashboardSettingsComponent implements OnDestroy {
       document.body.style.backgroundRepeat = 'no-repeat';
     });
   }
+  Device() {
+    return innerWidth > 450 ? 1 : 2;
+  }
 }

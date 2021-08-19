@@ -33,4 +33,7 @@ export class DashboardStatsComponent implements OnDestroy {
       text: arg.argumentText,
     };
   }
+  Device() {
+    return innerWidth > 450 ? 1 : 2;
+  }
 }
