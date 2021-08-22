@@ -4,18 +4,19 @@ import { MaterialModule } from '../material.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { AuthenticationComponent } from '../authentication/authentication.component';
 
 @NgModule({
-  declarations: [NavbarComponent],
+  declarations: [NavbarComponent, AuthenticationComponent],
   imports: [
     CommonModule,
     MaterialModule,
     RouterModule,
     FormsModule,
     FlexLayoutModule,
-    ScrollingModule
+    ScrollingModule,
   ],
   exports: [
     CommonModule,
@@ -23,7 +24,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     NavbarComponent,
     FormsModule,
     FlexLayoutModule,
-    RouterModule
+    RouterModule,
   ],
 })
-export class SharedModule { }
+export class SharedModule {}

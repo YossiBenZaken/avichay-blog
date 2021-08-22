@@ -1,8 +1,10 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { AuthenticationComponent } from './authentication/authentication.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/blog', pathMatch: 'full' },
+  { path: 'login', component: AuthenticationComponent },
   {
     path: '',
     loadChildren: () =>
