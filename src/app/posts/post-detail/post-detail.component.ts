@@ -1,4 +1,4 @@
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { AuthService } from './../../core/auth.service';
 import { PostService } from './../post.service';
 import {
@@ -6,11 +6,6 @@ import {
   OnInit,
   ViewEncapsulation,
   AfterViewInit,
-  AfterViewChecked,
-  OnDestroy,
-  OnChanges,
-  SimpleChanges,
-  AfterContentChecked,
   ChangeDetectorRef,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -153,10 +148,10 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
   visible() {
     this.post.draft = !this.post.draft;
     const data = {
-      draft: this.post.draft
-    }
+      draft: this.post.draft,
+    };
     const id = this._route.snapshot.paramMap.get('id');
-    this._posts.update(id,data);
+    this._posts.update(id, data);
   }
   share(company) {
     if (company === 'facebook') {

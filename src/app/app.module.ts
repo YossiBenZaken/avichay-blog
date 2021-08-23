@@ -14,11 +14,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { PostsModule } from './posts/posts.module';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { AppRoutingModule } from './app-routing.module';
+import { AuthenticationModule } from './authentication/authentication.module';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireAuthModule,
@@ -30,6 +31,7 @@ import { AppRoutingModule } from './app-routing.module';
     PostsModule,
     StoreModule,
     AppRoutingModule,
+    AuthenticationModule,
   ],
   providers: [ɵROUTER_PROVIDERS],
   bootstrap: [AppComponent],

@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ShoppingCart } from '../models/product';
 
 @Component({
   selector: 'app-shopping-cart-summary',
   templateUrl: './shopping-cart-summary.component.html',
-  styleUrls: ['./shopping-cart-summary.component.css']
+  styleUrls: ['./shopping-cart-summary.component.css'],
 })
 export class ShoppingCartSummaryComponent {
   @Input('cart') cart: ShoppingCart;
