@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center align-items-center mt-5">
+  <mat-card style="width: 300px">
+    <mat-card-header><mat-card-title>התחברות</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form #f="ngForm">
+        <p *ngIf="!loginMode">
+          <mat-form-field appearance="legacy" class="w-100">
+            <mat-label>שם מלא</mat-label>
+            <input matInput name="fullName" [(ngModel)]="fullName" />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="legacy" class="w-100">
+            <mat-label>אימייל</mat-label>
+            <input matInput name="email" [(ngModel)]="email" />
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="legacy" class="w-100">
+            <mat-label>סיסמא</mat-label>
+            <input matInput type="password" name="password" [(ngModel)]="psw" />
+          </mat-form-field>
+        </p>
+        <p class="text-center">
+          התחבר באמצעות:
+          <button
+            mat-button
+            style="padding: 0; min-width: unset"
+            (click)="loginWithGoogle()"
+          >
+            <img src="/assets/googleLogin.svg" />
+          </button>
+          <button
+            mat-button
+            style="padding: 0; min-width: unset"
+            (click)="loginWithFacebook()"
+          >
+            <img
+              src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGhlaWdodD0iNjdweCIgaWQ9IkxheWVyXzEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDY3IDY3OyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgNjcgNjciIHdpZHRoPSI2N3B4IiB4bWw6c3BhY2U9InByZXNlcnZlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIj48cGF0aCBkPSJNMjguNzY1LDUwLjMxOWg2Ljc0NFYzMy45OThoNC40OTlsMC41OTYtNS42MjRoLTUuMDk1ICBsMC4wMDctMi44MTZjMC0xLjQ2NiwwLjE0LTIuMjUzLDIuMjQ0LTIuMjUzaDIuODEyVjE3LjY4aC00LjVjLTUuNDA1LDAtNy4zMDcsMi43MjktNy4zMDcsNy4zMTd2My4zNzdoLTMuMzY5djUuNjI1aDMuMzY5VjUwLjMxOXogICBNMyw0aDYwdjYwSDNWNHoiIHN0eWxlPSJmaWxsLXJ1bGU6ZXZlbm9kZDtjbGlwLXJ1bGU6ZXZlbm9kZDtmaWxsOiMzQTU4OUI7Ii8+PC9zdmc+"
+              height="46px"
+              width="46px"
+            />
+          </button>
+        </p>
+      </form>
+    </mat-card-content>
+    <mat-card-actions style="display: flex; justify-content: space-evenly">
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="loginMode ? login() : signUp()"
+      >
+        {{ loginMode ? "התחבר" : "הרשמה" }}
+      </button>
+      <button mat-flat-button color="accent" (click)="switchMode()">
+        {{ loginMode ? "מעבר להרשמה" : "מעבר להתחברות" }}
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</div>
