@@ -1,6 +1,4 @@
-import { OrderService } from './../../store/order.service';
 import { ProductService } from './../../store/product.service';
-import { CategoryService } from './../../store/category.service';
 import { Observable } from 'rxjs';
 import { PostService } from './../post.service';
 import { AuthService } from './../../core/auth.service';
@@ -8,7 +6,6 @@ import { Component } from '@angular/core';
 import { Post } from '../post';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { Title } from '@angular/platform-browser';
-import { SharedService } from 'src/app/shared/shared.service';
 @Component({
   selector: 'app-post-dashboard',
   templateUrl: './post-dashboard.component.html',

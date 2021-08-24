@@ -1,6 +1,5 @@
 import { SharedModule } from './../shared/shared.module';
 import { OrderService } from './order.service';
-import { CommonModule } from '@angular/common';
 import { ProductService } from './product.service';
 import { CategoryService } from './category.service';
 import { ShoppingCartService } from './shopping-cart.service';
@@ -25,8 +24,8 @@ const routes: Routes = [
   { path: 'check-out', component: CheckOutComponent },
   { path: 'order-success/:id', component: OrderSuccessComponent },
   { path: 'my-orders', component: MyOrdersComponent },
-  { path: 'view-order/:id',component: ViewOrderComponent},
-  { path: 'edit-product/:id', component: EditProductComponent}
+  { path: 'view-order/:id', component: ViewOrderComponent },
+  { path: 'edit-product/:id', component: EditProductComponent },
 ];
 
 @NgModule({
@@ -45,7 +44,12 @@ const routes: Routes = [
     EditProductComponent,
   ],
   imports: [SharedModule, RouterModule.forChild(routes)],
-  providers: [ShoppingCartService, CategoryService, ProductService,OrderService],
-  exports: [ProductCardComponent]
+  providers: [
+    ShoppingCartService,
+    CategoryService,
+    ProductService,
+    OrderService,
+  ],
+  exports: [ProductCardComponent],
 })
 export class StoreModule {}

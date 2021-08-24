@@ -1,4 +1,3 @@
-import { MessagingService } from './messaging.service';
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
@@ -116,5 +115,14 @@ export class AuthService {
   }
   logout() {
     this.afAuth.signOut();
+  }
+  changePassword() {
+    this.afAuth.authState.subscribe((d) => {
+      d.updatePassword('Yossi1').then((value) => {
+        console.log(value);
+        this.logout();
+        this._router.navigate(['/login']);
+      });
+    });
   }
 }

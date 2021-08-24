@@ -3,7 +3,7 @@ import { take } from 'rxjs/operators';
 import { ProductService } from './../product.service';
 import { CategoryService } from './../category.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-edit-product',
@@ -12,7 +12,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditProductComponent {
   categories$;
-  product:Product;
+  product: Product;
   id;
   constructor(
     private _router: Router,
@@ -28,12 +28,12 @@ export class EditProductComponent {
         .snapshotChanges()
         .pipe(take(1))
         .subscribe((p) => {
-          (this.product = p.payload.data())
-        } );
+          this.product = p.payload.data();
+        });
     }
   }
   save(product) {
-    if (this.id)this._product.update(this.id, product);
+    if (this.id) this._product.update(this.id, product);
     this._router.navigateByUrl('/dashboard');
   }
   delete() {

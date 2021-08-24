@@ -9,7 +9,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { AuthenticationComponent } from '../authentication/authentication.component';
 
 @NgModule({
-  declarations: [NavbarComponent, AuthenticationComponent],
+  declarations: [NavbarComponent],
   imports: [
     CommonModule,
     MaterialModule,

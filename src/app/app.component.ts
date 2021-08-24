@@ -1,6 +1,4 @@
-import { MessagingService } from './core/messaging.service';
-import { Component, OnInit } from '@angular/core';
-import { Meta } from '@angular/platform-browser';
+import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { SharedService } from './shared/shared.service';
 declare let gtag: Function;
@@ -11,11 +9,7 @@ declare let gtag: Function;
 })
 export class AppComponent {
   title = 'avichay-blog';
-  constructor(
-    private _router: Router,
-    private _shared: SharedService,
-    private _message: MessagingService
-  ) {
+  constructor(private _router: Router, private _shared: SharedService) {
     _router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         gtag('config', 'G-NMLYFM9H8W', {

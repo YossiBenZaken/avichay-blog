@@ -6,7 +6,6 @@ import {
   AngularFirestore,
   AngularFirestoreCollection,
 } from '@angular/fire/firestore';
-import * as firebase from 'firebase';
 @Injectable({
   providedIn: 'root',
 })
@@ -84,7 +83,7 @@ export class ShoppingCartService {
     let cartId = await this.getOrCreateCartId();
     (await this.getCart()).pipe(take(1)).subscribe((a) => {
       a.items.forEach((item) => {
-        console.log(item)
+        console.log(item);
         this._store
           .collection('shopping-carts')
           .doc(cartId)

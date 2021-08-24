@@ -4,7 +4,13 @@ import { AuthenticationComponent } from './authentication/authentication.compone
 
 const routes: Routes = [
   { path: '', redirectTo: '/blog', pathMatch: 'full' },
-  { path: 'login', component: AuthenticationComponent },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./authentication/authentication.module').then(
+        (m) => m.AuthenticationModule
+      ),
+  },
   {
     path: '',
     loadChildren: () =>

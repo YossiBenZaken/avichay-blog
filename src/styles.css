@@ -28,3 +28,7 @@ h2,
 small {
   font-family: "Rubik", sans-serif !important;
 }
+.mat-toolbar.mat-primary {
+  background: #008846c9 !important;
+  color: white !important;
+}
