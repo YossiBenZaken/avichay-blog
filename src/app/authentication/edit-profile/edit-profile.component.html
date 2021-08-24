@@ -1,12 +1,12 @@
 <div class="d-flex justify-content-center align-items-center mt-5">
-  <mat-card style="width: 80%">
+  <mat-card style="width: 500px">
     <mat-card-header
       ><mat-card-title>עריכת פרופיל</mat-card-title></mat-card-header
     >
     <mat-card-content>
       <div class="row">
         <div class="col-6">
-          <form #f="ngForm" (ngSubmit)="updatePassword(f)">
+          <form #f="ngForm" (ngSubmit)="updatePassword(f)" *ngIf="provider">
             <p>
               <mat-form-field appearance="legacy" class="w-100">
                 <mat-label>סיסמא</mat-label>

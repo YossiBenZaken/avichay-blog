@@ -41,6 +41,9 @@
             >
               היסטוריית הזמנות
             </button>
+            <button mat-menu-item routerLink="/edit-profile" *ngIf="provider">
+              החלף סיסמא
+            </button>
             <button mat-menu-item (click)="_auth.logout()">התנתק</button>
           </mat-menu>
         </div>
@@ -49,8 +52,11 @@
         </ng-template>
       </div>
     </mat-sidenav>
-    <mat-sidenav-content>
-      <mat-toolbar color="primary">
+    <mat-sidenav-content fxFlexFill cdkScrollable>
+      <mat-toolbar
+        color="primary"
+        [ngClass]="{ 'shrink-toolbar': shrinkToolbar }"
+      >
         <div fxShow="true" fxHide.gt-sm="true">
           <button mat-icon-button (click)="sidenav.toggle()">
             <mat-icon>menu</mat-icon>
@@ -89,6 +95,9 @@
               </button>
               <button mat-menu-item routerLink="/my-orders">
                 היסטוריית הזמנות
+              </button>
+              <button mat-menu-item routerLink="/edit-profile" *ngIf="provider">
+                החלף סיסמא
               </button>
               <button mat-menu-item (click)="_auth.logout()">התנתק</button>
             </mat-menu>

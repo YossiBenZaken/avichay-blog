@@ -9,7 +9,7 @@ span {
   cursor: pointer;
 }
 .mat-toolbar {
-  height: 7vh;
+  height: 5vh;
   position: sticky;
   z-index: 9999;
   top: 0;
@@ -24,5 +24,10 @@ span {
   padding-top: 1rem;
 }
 .shrink-toolbar {
-  height: 35px;
+  height: 4vh;
+  background-color: #008846 !important;
+}
+.mat-toolbar.mat-primary {
+  background: #008846c9;
+  color: white !important;
 }

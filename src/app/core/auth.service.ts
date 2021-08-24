@@ -7,19 +7,23 @@ import { Router } from '@angular/router';
   providedIn: 'root',
 })
 export class AuthService {
-  authState: any = null;
+  authState: firebase.default.User = null;
   user$: Observable<firebase.default.User>;
   constructor(public afAuth: AngularFireAuth, private _router: Router) {
     this.afAuth.authState.subscribe((data) => (this.authState = data));
     this.user$ = this.afAuth.authState;
   }
 
-  get autnticated(): boolean {
+  get providers() {
+    return this.authState.providerData;
+  }
+
+  get authenticated(): boolean {
     return this.authState !== null;
   }
 
   get currentUserId(): string {
-    return this.autnticated ? this.authState.uid : null;
+    return this.authenticated ? this.authState.uid : null;
   }
 
   loginWithGoogle() {
@@ -29,7 +33,6 @@ export class AuthService {
         provider.addScope('profile');
         provider.addScope('email');
         this.afAuth.signInWithPopup(provider).then((res) => {
-          console.log(res);
           resolve(res);
           this._router.navigate(['/']);
         });
@@ -116,9 +119,9 @@ export class AuthService {
   logout() {
     this.afAuth.signOut();
   }
-  changePassword() {
+  changePassword(password: string) {
     this.afAuth.authState.subscribe((d) => {
-      d.updatePassword('Yossi1').then((value) => {
+      d.updatePassword(password).then((value) => {
         console.log(value);
         this.logout();
         this._router.navigate(['/login']);

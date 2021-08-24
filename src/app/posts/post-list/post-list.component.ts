@@ -64,10 +64,10 @@ export class PostListComponent implements OnInit {
     this.posts = this._posts.getPosts();
     this.posts.subscribe((p) => {
       if (
-        !this._auth.autnticated ||
+        !this._auth.authenticated ||
         (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
-        this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
-        ){
+          this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
+      ) {
         p = p.filter((post) => post.draft == false);
       }
       this.filteredPosts = p.slice(
@@ -83,11 +83,11 @@ export class PostListComponent implements OnInit {
   delete(id: string) {
     this._posts.delete(id);
   }
-  visible(id:string,draft: boolean) {
+  visible(id: string, draft: boolean) {
     const data = {
-      draft: !draft
-    }
-    this._posts.update(id,data);
+      draft: !draft,
+    };
+    this._posts.update(id, data);
   }
   filterPost() {
     if (this.filter != '') {
@@ -103,15 +103,15 @@ export class PostListComponent implements OnInit {
       );
     } else {
       this.pagination = true;
-      this.posts.subscribe((p) =>  {
+      this.posts.subscribe((p) => {
         if (
-          !this._auth.autnticated ||
+          !this._auth.authenticated ||
           (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
-          this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
-          ){
+            this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
+        ) {
           p = p.filter((post) => post.draft == false);
         }
-        (this.filteredPosts = p);
+        this.filteredPosts = p;
       });
     }
   }

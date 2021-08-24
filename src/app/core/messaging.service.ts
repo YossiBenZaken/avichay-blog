@@ -24,9 +24,7 @@ export class MessagingService {
     Notification.requestPermission().then((p) => {
       if (p == 'granted') {
         this._fireMessaging.getToken.subscribe((token) => {
-          console.log(token);
-          if (this._auth.autnticated) {
-            console.log(this._auth.currentUserId);
+          if (this._auth.authenticated) {
             this.userCollection.doc(this._auth.currentUserId).update({
               token: token,
             });

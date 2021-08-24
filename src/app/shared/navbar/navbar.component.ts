@@ -1,7 +1,7 @@
 import { ShoppingCartService } from './../../store/shopping-cart.service';
 import { UserService } from './../../core/user.service';
 import { AuthService } from './../../core/auth.service';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ShoppingCart } from 'src/app/store/models/product';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
@@ -17,6 +17,7 @@ export class NavbarComponent implements OnInit {
   cart$: Observable<ShoppingCart>;
   private readonly SHRINK_TOP_SCROLL_POSITION = 50;
   shrinkToolbar = false;
+  provider: boolean = false;
   constructor(
     public _auth: AuthService,
     private _user: UserService,
@@ -30,6 +31,8 @@ export class NavbarComponent implements OnInit {
       this._message.requestPermission();
       this._message.receiveMessage();
       _user.save(user);
+      this.provider =
+        _auth.providers.filter((e) => e.providerId === 'password').length === 1;
     });
   }
   async ngOnInit() {
@@ -42,12 +45,15 @@ export class NavbarComponent implements OnInit {
             event.getElementRef().nativeElement.scrollTop
         )
       )
-      .subscribe((scrollTop) =>
+      .subscribe((scrollTop) => {
         this._ngZone.run(
           () =>
             (this.shrinkToolbar =
               scrollTop > this.SHRINK_TOP_SCROLL_POSITION ? true : false)
-        )
-      );
+        );
+      });
+  }
+  scroll(event: any) {
+    const scroll = event.target.scrollTop;
   }
 }

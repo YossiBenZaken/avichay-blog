@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/core/auth.service';
 
@@ -7,11 +7,23 @@ import { AuthService } from 'src/app/core/auth.service';
   templateUrl: './edit-profile.component.html',
   styleUrls: ['./edit-profile.component.scss'],
 })
-export class EditProfileComponent {
+export class EditProfileComponent implements OnInit {
   psw: string;
+  provider: boolean = false;
   constructor(private _auth: AuthService) {}
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.provider =
+        this._auth.providers.filter((e) => e.providerId === 'password')
+          .length === 1;
+    }, 1500);
+  }
   updatePassword(form: NgForm) {
-    // this._auth.changePassword();
-    console.log(form.value);
+    if (
+      this._auth.providers.filter((e) => e.providerId === 'password').length ===
+      1
+    ) {
+      this._auth.changePassword(form.value.password);
+    }
   }
 }
