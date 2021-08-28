@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { AuthenticationComponent } from './authentication.component';
 import { EditProfileComponent } from './edit-profile/edit-profile.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
   {
@@ -15,10 +16,18 @@ const routes: Routes = [
     component: EditProfileComponent,
     canActivate: [AuthGuard],
   },
+  {
+    path: 'profile/:id',
+    component: ProfileComponent,
+  },
 ];
 
 @NgModule({
-  declarations: [AuthenticationComponent, EditProfileComponent],
+  declarations: [
+    AuthenticationComponent,
+    EditProfileComponent,
+    ProfileComponent,
+  ],
   imports: [SharedModule, RouterModule.forChild(routes)],
 })
 export class AuthenticationModule {}

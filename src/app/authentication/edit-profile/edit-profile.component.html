@@ -5,6 +5,14 @@
     >
     <mat-card-content>
       <div class="row">
+        <div class="col-4 text-center">
+          <img
+            src="{{ user.photoURL }}"
+            width="100px"
+            height="100px"
+            style="border-radius: 50%"
+          />
+        </div>
         <div class="col-6">
           <form #f="ngForm" (ngSubmit)="updatePassword(f)" *ngIf="provider">
             <p>
@@ -20,8 +28,21 @@
             </p>
             <button mat-flat-button color="primary">החלף סיסמא</button>
           </form>
+          <form #f2="ngForm" (ngSubmit)="updateProfile(f2)">
+            <p>
+              <mat-form-field appearance="legacy" class="w-100">
+                <mat-label>שם משתמש</mat-label>
+                <input
+                  matInput
+                  type="text"
+                  name="name"
+                  [(ngModel)]="displayName"
+                />
+              </mat-form-field>
+            </p>
+            <button mat-flat-button color="primary">עדכן פרופיל</button>
+          </form>
         </div>
-        <div class="col-6"></div>
       </div>
     </mat-card-content>
   </mat-card>

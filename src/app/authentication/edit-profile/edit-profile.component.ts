@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/core/auth.service';
-
+import * as firebase from 'firebase';
 @Component({
   selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
@@ -9,9 +9,13 @@ import { AuthService } from 'src/app/core/auth.service';
 })
 export class EditProfileComponent implements OnInit {
   psw: string;
+  displayName: string;
   provider: boolean = false;
+  user: firebase.default.User;
   constructor(private _auth: AuthService) {}
   ngOnInit(): void {
+    this.user = this._auth.authState;
+    this.displayName = this.user.displayName;
     setTimeout(() => {
       this.provider =
         this._auth.providers.filter((e) => e.providerId === 'password')
@@ -25,5 +29,12 @@ export class EditProfileComponent implements OnInit {
     ) {
       this._auth.changePassword(form.value.password);
     }
+  }
+  updateProfile(form: NgForm) {
+    const body = {
+      name: form.value.name,
+      photo: this._auth.authState.photoURL,
+    };
+    this._auth.updateProfile(body);
   }
 }

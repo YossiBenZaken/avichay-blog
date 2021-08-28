@@ -48,6 +48,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
       );
     await this.getPost();
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.comment.name = this._auth.authState.displayName || '';
   }
   ngAfterViewInit() {
     this._route.paramMap.subscribe(async (param) => {
@@ -129,7 +130,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
     const id = this._route.snapshot.paramMap.get('id');
     this._posts.update(id, formData);
     this.comment.content = '';
-    this.comment.name = '';
+    this.comment.name = this._auth.authState.displayName || '';
   }
   deleteComment(index: number) {
     this.post.comments.splice(index, 1);

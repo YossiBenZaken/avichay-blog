@@ -17,7 +17,6 @@ export class NavbarComponent implements OnInit {
   cart$: Observable<ShoppingCart>;
   private readonly SHRINK_TOP_SCROLL_POSITION = 50;
   shrinkToolbar = false;
-  provider: boolean = false;
   constructor(
     public _auth: AuthService,
     private _user: UserService,
@@ -31,8 +30,6 @@ export class NavbarComponent implements OnInit {
       this._message.requestPermission();
       this._message.receiveMessage();
       _user.save(user);
-      this.provider =
-        _auth.providers.filter((e) => e.providerId === 'password').length === 1;
     });
   }
   async ngOnInit() {

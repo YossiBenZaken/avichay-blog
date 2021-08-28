@@ -124,7 +124,9 @@
           alt="{{ post.title }}"
         />
       </div>
-      <h2 style="text-align: center; color: #000">{{ post.title }}{{post.draft ? '(טיוטה)' : ''}}</h2>
+      <h2 style="text-align: center; color: #000">
+        {{ post.title }}{{ post.draft ? "(טיוטה)" : "" }}
+      </h2>
       <p style="text-align: center">
         <small
           >נכתב ע"י {{ post.author }} &bull; ב
@@ -197,7 +199,11 @@
         <button mat-icon-button (click)="delete(post.id)" color="warn">
           <mat-icon>delete</mat-icon>
         </button>
-        <button mat-icon-button (click)="visible()" [color]="post.draft ? 'warn': 'primary'">
+        <button
+          mat-icon-button
+          (click)="visible()"
+          [color]="post.draft ? 'warn' : 'primary'"
+        >
           <mat-icon>visibility</mat-icon>
         </button>
       </mat-card-actions>
@@ -205,7 +211,7 @@
     <div *ngIf="post.comments">
       <mat-card *ngIf="post.comments.length > 0">
         <h1 style="text-align: center">תגובות</h1>
-        <div *ngFor="let comment of post.comments; let index = i">
+        <div *ngFor="let comment of post.comments; let i = index">
           <span
             >שם המגיב: <b>{{ comment.name }}</b></span
           >
@@ -233,7 +239,12 @@
       <span style="font-size: 1.2em">הגב לפוסט:</span>
       <mat-form-field style="text-align: right">
         <mat-label>שם</mat-label>
-        <input matInput placeholder="שם" [(ngModel)]="comment.name" />
+        <input
+          matInput
+          placeholder="שם"
+          [(ngModel)]="comment.name"
+          [disabled]="_auth.authState"
+        />
       </mat-form-field>
       <mat-form-field style="text-align: right">
         <mat-label>להשאיר תגובה</mat-label>
@@ -250,7 +261,6 @@
       </div>
     </mat-card>
   </div>
-
 </ng-container>
 <section *ngIf="!post">
   <lottie-player

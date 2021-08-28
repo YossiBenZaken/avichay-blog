@@ -3,13 +3,18 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   authState: firebase.default.User = null;
   user$: Observable<firebase.default.User>;
-  constructor(public afAuth: AngularFireAuth, private _router: Router) {
+  constructor(
+    public afAuth: AngularFireAuth,
+    private _router: Router,
+    private _user: UserService
+  ) {
     this.afAuth.authState.subscribe((data) => (this.authState = data));
     this.user$ = this.afAuth.authState;
   }
@@ -118,6 +123,7 @@ export class AuthService {
   }
   logout() {
     this.afAuth.signOut();
+    this._router.navigate(['/login']);
   }
   changePassword(password: string) {
     this.afAuth.authState.subscribe((d) => {
@@ -126,6 +132,15 @@ export class AuthService {
         this.logout();
         this._router.navigate(['/login']);
       });
+    });
+  }
+  updateProfile(body: { name: string; photo: string }) {
+    this.afAuth.authState.subscribe((user) => {
+      user
+        .updateProfile({ displayName: body.name, photoURL: body.photo })
+        .then(() => {
+          console.log(user);
+        });
     });
   }
 }

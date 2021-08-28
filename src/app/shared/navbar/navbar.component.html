@@ -19,6 +19,12 @@
             החנות שלנו
           </button>
           <button mat-button [matMenuTriggerFor]="menu">
+            <img
+              src="{{ user.photoURL }}"
+              height="30px"
+              width="30px"
+              style="border-radius: 50%"
+            />
             {{ user.displayName }}
             <mat-icon>arrow_drop_down</mat-icon>
           </button>
@@ -41,8 +47,8 @@
             >
               היסטוריית הזמנות
             </button>
-            <button mat-menu-item routerLink="/edit-profile" *ngIf="provider">
-              החלף סיסמא
+            <button mat-menu-item routerLink="/edit-profile">
+              עריכת פרופיל
             </button>
             <button mat-menu-item (click)="_auth.logout()">התנתק</button>
           </mat-menu>
@@ -78,7 +84,14 @@
                 shopping_cart
               </mat-icon>
             </button>
+
             <button mat-button [matMenuTriggerFor]="menu">
+              <img
+                src="{{ user.photoURL }}"
+                height="35px"
+                width="35px"
+                style="border-radius: 50%"
+              />
               {{ user.displayName }}
               <mat-icon>arrow_drop_down</mat-icon>
             </button>
@@ -96,8 +109,8 @@
               <button mat-menu-item routerLink="/my-orders">
                 היסטוריית הזמנות
               </button>
-              <button mat-menu-item routerLink="/edit-profile" *ngIf="provider">
-                החלף סיסמא
+              <button mat-menu-item routerLink="/edit-profile">
+                עריכת פרופיל
               </button>
               <button mat-menu-item (click)="_auth.logout()">התנתק</button>
             </mat-menu>

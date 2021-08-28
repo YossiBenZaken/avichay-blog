@@ -16,6 +16,7 @@ export class UserService {
     this.userCollection.doc(user.uid).set({
       name: user.displayName,
       email: user.email,
+      photo: user.photoURL,
     });
   }
   get(uid: string) {
