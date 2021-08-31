@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { AuthenticationComponent } from '../authentication/authentication.component';
 
 @NgModule({
   declarations: [NavbarComponent],
