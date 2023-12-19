@@ -98,14 +98,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "avichay-blog:build"
+            "buildTarget": "avichay-blog:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "avichay-blog:build:production"
+              "buildTarget": "avichay-blog:build:production"
             },
             "development": {
-              "browserTarget": "avichay-blog:build:development"
+              "buildTarget": "avichay-blog:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -113,7 +113,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "avichay-blog:build"
+            "buildTarget": "avichay-blog:build"
           }
         },
         "test": {
