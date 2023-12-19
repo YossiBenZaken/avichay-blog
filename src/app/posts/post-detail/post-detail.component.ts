@@ -81,7 +81,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
             this.post.views = 1;
           }
           this._posts.update(id, this.post);
-          this._title.setTitle('מכשפה צבאית - ' + this.post.title);
+          this._title.setTitle('מכשפת יער - ' + this.post.title);
           this._meta.updateTag({
             property: 'og:title',
             content: this.post.title,

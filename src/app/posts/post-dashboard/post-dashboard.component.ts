@@ -36,7 +36,7 @@ export class PostDashboardComponent {
     private _title: Title,
     private _product: ProductService
   ) {
-    this._title.setTitle('מכשפה צבאית - פאנל ניהול');
+    this._title.setTitle('מכשפת יער - פאנל ניהול');
     this._posts
       .getTags()
       .subscribe(

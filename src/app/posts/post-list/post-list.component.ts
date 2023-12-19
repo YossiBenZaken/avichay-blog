@@ -55,7 +55,7 @@ export class PostListComponent implements OnInit {
     private _title: Title,
     private _route: ActivatedRoute
   ) {
-    this._title.setTitle('מכשפה צבאית');
+    this._title.setTitle('מכשפת יער');
   }
 
   ngOnInit(): void {
