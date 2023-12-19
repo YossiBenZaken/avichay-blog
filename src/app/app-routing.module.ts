@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { AuthenticationComponent } from './authentication/authentication.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/blog', pathMatch: 'full' },
+  { path: '', redirectTo: '/blog', pathMatch: Routes. },
   {
     path: '',
     loadChildren: () =>
@@ -27,7 +27,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       preloadingStrategy: PreloadAllModules,
-      initialNavigation: 'enabled',
+      initialNavigation: 'enabledBlocking'
     }),
   ],
   exports: [RouterModule],
