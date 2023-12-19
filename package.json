@@ -33,7 +33,7 @@
     "firebase": "^8.6.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
-    "zone.js": "~0.14.2",
+    "zone.js": "~0.13.0",
     "bootstrap": "^5.1.0",
     "@fortawesome/fontawesome-free": "^5.15.4"
   },
