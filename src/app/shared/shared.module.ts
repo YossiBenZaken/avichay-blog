@@ -4,7 +4,6 @@ import { MaterialModule } from '../material.module';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
@@ -14,7 +13,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MaterialModule,
     RouterModule,
     FormsModule,
-    FlexLayoutModule,
     ScrollingModule,
   ],
   exports: [
@@ -22,7 +20,6 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
     MaterialModule,
     NavbarComponent,
     FormsModule,
-    FlexLayoutModule,
     RouterModule,
   ],
 })
