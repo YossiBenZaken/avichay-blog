@@ -26,12 +26,12 @@ function getHebrewPaginatorIntl() {
 }
 
 import { NgModule } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatCardModule } from '@angular/material/card';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { MatLegacyProgressBarModule as MatProgressBarModule } from '@angular/material/legacy-progress-bar';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {
@@ -43,13 +43,13 @@ import {
   DxTemplateModule,
 } from 'devextreme-angular';
 import { MatBadgeModule } from '@angular/material/badge';
-import { MatTableModule } from '@angular/material/table';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatRadioModule } from '@angular/material/radio';
+import { MatLegacyTableModule as MatTableModule } from '@angular/material/legacy-table';
+import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
+import { MatLegacyRadioModule as MatRadioModule } from '@angular/material/legacy-radio';
 import {
-  MatPaginatorModule,
-  MatPaginatorIntl,
-} from '@angular/material/paginator';
+  MatLegacyPaginatorModule as MatPaginatorModule,
+  MatLegacyPaginatorIntl as MatPaginatorIntl,
+} from '@angular/material/legacy-paginator';
 @NgModule({
   exports: [
     MatButtonModule,
