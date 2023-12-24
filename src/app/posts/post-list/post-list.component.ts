@@ -42,7 +42,7 @@ import { DocumentData, QueryDocumentSnapshot } from '@angular/fire/firestore';
   ],
 })
 export class PostListComponent implements OnInit {
-  posts: Promise<QueryDocumentSnapshot<Post, DocumentData>[]>;
+  posts: QueryDocumentSnapshot<Post, DocumentData>[];
   filteredPosts: Post[];
   filter: string;
   pagination: boolean;
@@ -58,30 +58,25 @@ export class PostListComponent implements OnInit {
     this._title.setTitle('מכשפת יער');
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.page = 1;
     this.pagination = true;
-    this.posts = this._posts.getPosts();
-    this.posts.then(p => {
-      if (
-        !this._auth.authenticated ||
-        (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
-          this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
-      ) {
-        
-        p = p.filter((post) => post.data().draft == false);
-      }
-      this.filteredPosts = p.slice(
-        this.page ? (this.page - 1) * 10 : 0,
-        this.page * 10 || 10
-      ).map(post => ({id: post.id ,...post.data()}));
-      console.log(this.filteredPosts);
-      this.numOfPages = Math.floor(p.length / 10);
-      if (p.length % 10 != 0) {
-        this.numOfPages += 1;
-      }
-      
-    });
+    this.posts = await this._posts.getPosts();
+    console.log(`Found ${this.posts.length} posts`);
+    if (
+      !this._auth.authenticated ||
+      (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
+        this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
+    ) {
+      this.posts = this.posts.filter((post) => post.data().draft == false);
+    }
+    this.filteredPosts = this.posts
+      .slice(this.page ? (this.page - 1) * 10 : 0, this.page * 10 || 10)
+      .map((post) => ({ id: post.id, ...post.data() }));
+    this.numOfPages = Math.floor(this.posts.length / 10);
+    if (this.posts.length % 10 != 0) {
+      this.numOfPages += 1;
+    }
   }
   async delete(id: string) {
     await this._posts.delete(id);
@@ -95,39 +90,36 @@ export class PostListComponent implements OnInit {
   filterPost() {
     if (this.filter != '') {
       this.pagination = false;
-      this.posts.then(
-        (p) =>
-          (this.filteredPosts = p.filter(
-            (po) =>
-              po.data().title.includes(this.filter) ||
-              po.data().content.includes(this.filter) ||
-              (po.data().tags && po.data().tags.includes(this.filter))
-          ).map(post => ({id: post.id ,...post.data()})))
-      );
+      this.filteredPosts = this.posts
+        .filter(
+          (po) =>
+            po.data().title.includes(this.filter) ||
+            po.data().content.includes(this.filter) ||
+            (po.data().tags && po.data().tags.includes(this.filter))
+        )
+        .map((post) => ({ id: post.id, ...post.data() }));
     } else {
       this.pagination = true;
-      this.posts.then((p) => {
-        if (
-          !this._auth.authenticated ||
-          (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
-            this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
-        ) {
-          p = p.filter((post) => post.data().draft == false);
-        }
-        this.filteredPosts = p.map(post => ({id: post.id ,...post.data()}));
-      });
+      if (
+        !this._auth.authenticated ||
+        (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
+          this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
+      ) {
+        this.posts = this.posts.filter((post) => post.data().draft == false);
+      }
+      this.filteredPosts = this.posts.map((post) => ({
+        id: post.id,
+        ...post.data(),
+      }));
     }
   }
   changePage(page) {
     if (page > this.numOfPages) return;
     if (page < 1) return;
     this.page = page;
-    this.posts.then((p) => {
-      this.filteredPosts = p.slice(
-        this.page ? (this.page - 1) * 10 : 0,
-        this.page * 10 || 10
-      ).map(post => ({id: post.id ,...post.data()}));;
-    });
+    this.filteredPosts = this.posts
+      .slice(this.page ? (this.page - 1) * 10 : 0, this.page * 10 || 10)
+      .map((post) => ({ id: post.id, ...post.data() }));
   }
   showComments(post: Post) {
     this.popupVisible = true;

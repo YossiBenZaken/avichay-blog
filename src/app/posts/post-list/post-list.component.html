@@ -40,6 +40,7 @@
           matBadgeColor="accent"
           matBadgePosition="before"
           matBadge="{{ (post.comments && post.comments.length) || '0' }}"
+          aria-hidden="false"
           (click)="showComments(post)"
         >
           message
