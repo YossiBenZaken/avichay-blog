@@ -1,11 +1,35 @@
-@import '~@angular/material/theming';
-@include mat-core();
+@use '@angular/material' as mat;
+@include mat.core();
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
-$ngBlog-app-primary: mat-palette($mat-green, A400);
-$ngBlog-app-accent:  mat-palette($mat-orange,A200);
 
-$ngBlog-app-warn:    mat-palette($mat-deep-orange,500);
+$my-primary: mat.define-palette(mat.$indigo-palette, 500);
+$my-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 
-$ngBlog-app-theme: mat-light-theme($ngBlog-app-primary, $ngBlog-app-accent, $ngBlog-app-warn);
+// The "warn" palette is optional and defaults to red if not specified.
+$my-warn: mat.define-palette(mat.$red-palette);
 
-@include angular-material-theme($ngBlog-app-theme);
+$my-theme: mat.define-light-theme((
+ color: (
+   primary: $my-primary,
+   accent: $my-accent,
+   warn: $my-warn,
+ ),
+ typography: mat.define-typography-config(),
+ density: 0,
+));
+
+// $ngBlog-app-primary: mat.define-palette($mat-green, A400);
+// $ngBlog-app-accent:  mat-palette($mat-orange,A200);
+
+// $ngBlog-app-warn:    mat-palette($mat-deep-orange,500);
+
+// $ngBlog-app-theme: mat.define-light-theme((
+//     color: (
+//         primary: $ngBlog-app-primary,
+//         accent: $ngBlog-app-accent,
+//         warn: $ngBlog-app-warn
+//     )
+// ));
+
+// @include mat.all-component-themes($ngBlog-app-theme);

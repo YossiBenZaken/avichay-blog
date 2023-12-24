@@ -1,5 +1,5 @@
 <div class="d-flex justify-content-center align-items-center mt-5">
-  <mat-card style="width: 500px">
+  <mat-card appearance="outlined" style="width: 500px">
     <mat-card-header
       ><mat-card-title>עריכת פרופיל</mat-card-title></mat-card-header
     >
@@ -16,7 +16,7 @@
         <div class="col-6">
           <form #f="ngForm" (ngSubmit)="updatePassword(f)" *ngIf="provider">
             <p>
-              <mat-form-field appearance="legacy" class="w-100">
+              <mat-form-field class="w-100">
                 <mat-label>סיסמא</mat-label>
                 <input
                   matInput
@@ -30,7 +30,7 @@
           </form>
           <form #f2="ngForm" (ngSubmit)="updateProfile(f2)">
             <p>
-              <mat-form-field appearance="legacy" class="w-100">
+              <mat-form-field class="w-100">
                 <mat-label>שם משתמש</mat-label>
                 <input
                   matInput

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/core/auth.service';
-import * as firebase from 'firebase';
+import { User } from '@angular/fire/auth';
 @Component({
   selector: 'app-edit-profile',
   templateUrl: './edit-profile.component.html',
@@ -10,7 +10,7 @@ export class EditProfileComponent implements OnInit {
   psw: string;
   displayName: string;
   provider: boolean = false;
-  user: firebase.default.User;
+  user: User;
   constructor(private _auth: AuthService) {}
   ngOnInit(): void {
     this.user = this._auth.authState;

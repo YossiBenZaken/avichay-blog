@@ -1,25 +1,25 @@
 import { Injectable } from '@angular/core';
-import * as firebase from 'firebase';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/firestore';
+import { Firestore, setDoc,doc, getDoc } from '@angular/fire/firestore';
+import { User } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  userCollection: AngularFirestoreCollection<any>;
-  constructor(private _store: AngularFirestore) {
-    this.userCollection = this._store.collection('users');
-  }
-  save(user: firebase.default.User) {
-    this.userCollection.doc(user.uid).set({
+  constructor(private _store: Firestore) {}
+  async save(user: User) {
+    await setDoc(doc(this._store, "users", user.uid), {
       name: user.displayName,
       email: user.email,
       photo: user.photoURL,
-    });
+    })
   }
-  get(uid: string) {
-    return this._store.doc(`users/${uid}`);
+  async get(uid: string) {
+    const docRef = doc(this._store, `users/${uid}`);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      throw new Error('document not found');
+    }
   }
 }

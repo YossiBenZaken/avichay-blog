@@ -18,12 +18,9 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this._route.params.subscribe((param) => {
       this.id = param.id;
-      this._user.userCollection
-        .doc(param.id)
-        .get()
-        .subscribe((res) => {
-          this.user = res.data();
-        });
+      this._user.get(param.id).then(res => {
+        this.user = res.data();
+      })
     });
   }
   get currentUser() {

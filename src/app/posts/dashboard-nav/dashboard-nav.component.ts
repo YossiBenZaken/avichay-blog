@@ -11,9 +11,6 @@ import { Component } from '@angular/core';
         <button mat-raised-button routerLink="/dashboard/posts">פוסטים</button>
       </div>
       <div class="col-md-3 col-6 margin-mobile-top">
-        <button mat-raised-button routerLink="/dashboard/store">חנות</button>
-      </div>
-      <div class="col-md-3 col-6 margin-mobile-top">
         <button mat-raised-button routerLink="/dashboard/settings">
           הגדרות בלוג
         </button>
@@ -22,12 +19,12 @@ import { Component } from '@angular/core';
   `,
   styles: [
     `
-      @media (max-width: 450px) {
-        .margin-mobile-top {
-          margin-top: 1em;
-        }
-      }
-    `,
+          @media (max-width: 450px) {
+            .margin-mobile-top {
+              margin-top: 1em;
+            }
+          }
+        `,
   ],
 })
 export class DashboardNavComponent {}

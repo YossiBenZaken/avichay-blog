@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../core/auth.service';
 import { UserService } from '../core/user.service';
@@ -12,6 +12,6 @@ export class AuthGuardService  {
 
   constructor(private _auth: AuthService,private _user:UserService) { }
   canActivate(): Observable<boolean>{
-    return this._auth.user$.pipe(map(user => user.uid == '2cXuXRRfYaaItvmuNZESMJUtpCb2' || user.uid == 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2'));
+    return of(['2cXuXRRfYaaItvmuNZESMJUtpCb2','b8txRyLkBNZ1jQsiCkKtKO7nD6o2'].includes(this._auth.authState.uid));
   }
 }

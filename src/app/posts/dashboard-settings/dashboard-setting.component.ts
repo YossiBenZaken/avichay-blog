@@ -7,33 +7,21 @@ import { SharedService } from 'src/app/shared/shared.service';
   templateUrl: './dashboard-setting.component.html',
   styleUrls: ['./dashboard-setting.component.css'],
 })
-export class DashboardSettingsComponent implements OnDestroy {
+export class DashboardSettingsComponent {
   selectedBackground;
   backgrounds$;
-  subscriptionBackground: Subscription;
   constructor(private _shared: SharedService) {
     this.backgrounds$ = _shared.getBackgrounds();
-    this.subscriptionBackground = this._shared.optionDoc
-      .get()
-      .subscribe((option) => {
-        this.selectedBackground = option.data().selected;
-      });
-  }
-  ngOnDestroy() {
-    if (this.subscriptionBackground) {
-      this.subscriptionBackground.unsubscribe();
-    }
-  }
-  saveBackground() {
-    this._shared.saveBackground({ selected: Number(this.selectedBackground) });
-    this._shared.optionDoc.get().subscribe((result) => {
-      let options = result.data();
-      document.body.style.background = `url(${
-        options.background[options.selected]
-      })`;
-      document.body.style.backgroundSize = '100% 100%';
-      document.body.style.backgroundRepeat = 'no-repeat';
+    _shared.assignDoc().then(() => {
+      this.selectedBackground = _shared.optionDoc.data().selected;
     });
+  }
+  async saveBackground() {
+    this._shared.saveBackground({ selected: Number(this.selectedBackground) });
+    let options = (await this._shared.assignDoc()).data();
+    document.body.style.background = `url('${options.background[options.selected]}')`;
+    document.body.style.backgroundSize = '100% 100%';
+    document.body.style.backgroundRepeat = 'no-repeat';
   }
   Device() {
     return innerWidth > 450 ? 1 : 2;

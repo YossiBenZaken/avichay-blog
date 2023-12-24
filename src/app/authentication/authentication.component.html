@@ -1,22 +1,22 @@
 <div class="d-flex justify-content-center align-items-center mt-5">
-  <mat-card style="width: 300px">
+  <mat-card appearance="outlined" style="width: 300px">
     <mat-card-header><mat-card-title>התחברות</mat-card-title></mat-card-header>
     <mat-card-content>
       <form #f="ngForm">
         <p *ngIf="!loginMode">
-          <mat-form-field appearance="legacy" class="w-100">
+          <mat-form-field class="w-100">
             <mat-label>שם מלא</mat-label>
             <input matInput name="fullName" [(ngModel)]="fullName" />
           </mat-form-field>
         </p>
         <p>
-          <mat-form-field appearance="legacy" class="w-100">
+          <mat-form-field class="w-100">
             <mat-label>אימייל</mat-label>
             <input matInput name="email" [(ngModel)]="email" />
           </mat-form-field>
         </p>
         <p>
-          <mat-form-field appearance="legacy" class="w-100">
+          <mat-form-field class="w-100">
             <mat-label>סיסמא</mat-label>
             <input matInput type="password" name="password" [(ngModel)]="psw" />
           </mat-form-field>

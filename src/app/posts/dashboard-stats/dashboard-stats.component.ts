@@ -7,19 +7,16 @@ import { PostService } from '../post.service';
   templateUrl: './dashboard-stats.component.html',
   styleUrls: ['./dashboard-stats.component.css'],
 })
-export class DashboardStatsComponent implements OnDestroy {
+export class DashboardStatsComponent {
   dataSource;
-  subscription: Subscription;
   constructor(private _posts: PostService) {
-    this.subscription = this._posts.getPosts().subscribe((posts) => {
-      posts.forEach((post) => {
-        post.views = post.views ? post.views : 0;
+    this._posts.getPosts().then((posts) => {
+      let p = posts.map((post) => {
+        let postData = post.data();
+        postData.views = postData.views ? postData.views : 0;
       });
-      this.dataSource = posts;
+      this.dataSource = p;
     });
-  }
-  ngOnDestroy() {
-    this.subscription.unsubscribe();
   }
   pointClick(e: any) {
     var point = e.target;

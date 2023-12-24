@@ -1,27 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
-  AngularFirestore,
-  AngularFirestoreDocument,
+  DocumentData,
+  DocumentSnapshot,
+  Firestore,
+  doc,
+  getDoc,
+  updateDoc,
 } from '@angular/fire/firestore';
-import { pipe } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
-  optionDoc: AngularFirestoreDocument<any>;
-  constructor(private _store: AngularFirestore) {
-    this.optionDoc = this._store
-      .collection('options')
-      .doc('bCFJabzirrkGcdJcCi1k');
+  private _store: Firestore = inject(Firestore);
+  optionDoc: DocumentSnapshot<DocumentData, DocumentData>;
+  async assignDoc() {
+    return await getDoc(
+      doc(this._store, 'options', 'bCFJabzirrkGcdJcCi1k')
+    );
   }
-  getBackgrounds() {
-    return this.optionDoc
-      .snapshotChanges()
-      .pipe(map((a) => a.payload.data().background));
+  async getBackgrounds() {
+    const backgroundRef = await getDoc(
+      doc(this._store, 'options', 'bCFJabzirrkGcdJcCi1k')
+    );
+    return backgroundRef.data().background;
   }
-  saveBackground(arr) {
-    this.optionDoc.update(arr);
+  async saveBackground(arr) {
+    await updateDoc(doc(this._store, 'options', 'bCFJabzirrkGcdJcCi1k'), arr);
   }
 }

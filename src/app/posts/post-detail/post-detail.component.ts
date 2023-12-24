@@ -5,8 +5,7 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
-  AfterViewInit,
-  ChangeDetectorRef,
+  AfterViewInit
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Post, Comment } from '../post';
@@ -26,7 +25,6 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
   tagsItems: string[];
   prePost: Post;
   nextPost: Post;
-  posts: Subscription;
   routeId: string;
   constructor(
     private _route: ActivatedRoute,
@@ -34,8 +32,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
     public _auth: AuthService,
     private _router: Router,
     private _title: Title,
-    private _meta: Meta,
-    private _cd: ChangeDetectorRef
+    private _meta: Meta
   ) {
     this.routeId = this._route.snapshot.paramMap.get('id');
   }
@@ -43,9 +40,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
   async ngOnInit() {
     this._posts
       .getTags()
-      .subscribe(
-        (tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag)))
-      );
+      .then((tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag))));
     await this.getPost();
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.comment.name = this._auth.authState.displayName || '';
@@ -53,49 +48,50 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this._route.paramMap.subscribe(async (param) => {
       const id = param.get('id');
-      this.posts = this._posts.getPosts().subscribe((p) => {
-        let posts = p;
-        const lengthOfPosts = p.length;
-        const thisPost = posts.filter((pf) => pf.id === id)[0];
-        const indexOfThisPost = posts.findIndex((p) => p == thisPost);
-        if (indexOfThisPost > 0) {
-          this.nextPost = p[indexOfThisPost - 1];
-        }
-        if (indexOfThisPost < lengthOfPosts) {
-          this.prePost = p[indexOfThisPost + 1];
-        }
-      });
+      let posts = await this._posts.getPosts();
+      const lengthOfPosts = posts.length;
+      const thisPost = posts.filter((pf) => pf.id === id)[0];
+      const indexOfThisPost = posts.findIndex((p) => p == thisPost);
+      if (indexOfThisPost > 0) {
+        this.nextPost = {
+          id: posts[indexOfThisPost - 1].id,
+          ...posts[indexOfThisPost - 1].data(),
+        };
+      }
+      if (indexOfThisPost < lengthOfPosts) {
+        this.prePost = {
+          id: posts[indexOfThisPost + 1].id,
+          ...posts[indexOfThisPost + 1].data(),
+        };
+      }
     });
   }
   getPost() {
     const id = this._route.snapshot.paramMap.get('id');
     this._posts
       .getPostData(id)
-      .ref.get()
-      .then((doc) => {
-        if (doc.exists) {
-          this.post = doc.data();
-          if (this.post.views) {
-            this.post.views += 1;
-          } else {
-            this.post.views = 1;
-          }
-          this._posts.update(id, this.post);
-          this._title.setTitle('מכשפת יער - ' + this.post.title);
+      .then(async (doc) => {
+        this.post = doc;
+        if (this.post.views) {
+          this.post.views += 1;
+        } else {
+          this.post.views = 1;
+        }
+        await this._posts.update(id, this.post);
+        this._title.setTitle('מכשפת יער - ' + this.post.title);
+        this._meta.updateTag({
+          property: 'og:title',
+          content: this.post.title,
+        });
+        this._meta.updateTag({
+          property: 'og:description',
+          content: this.post.content.substr(0, 100),
+        });
+        if (this.post.image) {
           this._meta.updateTag({
-            property: 'og:title',
-            content: this.post.title,
+            property: 'og:image',
+            content: this.post.image,
           });
-          this._meta.updateTag({
-            property: 'og:description',
-            content: this.post.content.substr(0, 100),
-          });
-          if (this.post.image) {
-            this._meta.updateTag({
-              property: 'og:image',
-              content: this.post.image,
-            });
-          }
         }
       })
       .then(() => {
@@ -107,17 +103,17 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
         }, 0);
       });
   }
-  updatePost() {
+  async updatePost() {
     const formData = {
       title: this.post.title,
       content: this.post.content,
       tags: this.tags,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    this._posts.update(id, formData);
+    await this._posts.update(id, formData);
     this.editing = false;
   }
-  updateComment() {
+  async updateComment() {
     if (!this.post.comments) {
       this.post.comments = [];
     }
@@ -128,31 +124,31 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
       comments: comment,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    this._posts.update(id, formData);
+    await this._posts.update(id, formData);
     this.comment.content = '';
     this.comment.name = this._auth.authState.displayName || '';
   }
-  deleteComment(index: number) {
+  async deleteComment(index: number) {
     this.post.comments.splice(index, 1);
     const comment = this.post.comments.map((obj) => Object.assign({}, obj));
     const formData = {
       comments: comment,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    this._posts.update(id, formData);
+    await this._posts.update(id, formData);
   }
-  delete() {
+  async delete() {
     const id = this._route.snapshot.paramMap.get('id');
-    this._posts.delete(id);
+    await this._posts.delete(id);
     this._router.navigate(['/blog']);
   }
-  visible() {
+  async visible() {
     this.post.draft = !this.post.draft;
     const data = {
       draft: this.post.draft,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    this._posts.update(id, data);
+    await this._posts.update(id, data);
   }
   share(company) {
     if (company === 'facebook') {
@@ -167,9 +163,9 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
       );
     }
   }
-  onCustomItemCreating(args) {
+  async onCustomItemCreating(args) {
     let newValue = args.text;
-    this._posts.createTag({ tag: newValue });
+    await this._posts.createTag({ tag: newValue });
     args.customItem = newValue;
   }
 }

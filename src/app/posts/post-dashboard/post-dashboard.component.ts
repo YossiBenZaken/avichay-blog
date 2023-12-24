@@ -1,10 +1,14 @@
-import { ProductService } from './../../store/product.service';
 import { Observable } from 'rxjs';
 import { PostService } from './../post.service';
 import { AuthService } from './../../core/auth.service';
 import { Component } from '@angular/core';
 import { Post } from '../post';
-import { AngularFireStorage } from '@angular/fire/storage';
+import {
+  Storage,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from '@angular/fire/storage';
 import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-post-dashboard',
@@ -18,7 +22,7 @@ export class PostDashboardComponent {
   tags: string[] = [];
   tagsItems: string[];
   buttonText: string = 'צור פוסט';
-  uploadPercent: Observable<number>;
+  uploadPercent: number;
   uploadTempPercent: Observable<number>;
   downloadURL: Promise<any>;
   id;
@@ -32,39 +36,35 @@ export class PostDashboardComponent {
   constructor(
     private _auth: AuthService,
     private _posts: PostService,
-    private _storage: AngularFireStorage,
+    private _storage: Storage,
     private _title: Title,
-    private _product: ProductService
   ) {
     this._title.setTitle('מכשפת יער - פאנל ניהול');
     this._posts
       .getTags()
-      .subscribe(
-        (tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag)))
-      );
+      .then((tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag))));
   }
-  createPost() {
-    this._auth.user$.subscribe((user) => {
-      const data: Post = {
-        author: user.displayName || user.email,
-        authorID: user.uid,
-        content: this.content,
-        title: this.title,
-        image: this.image,
-        published: new Date(),
-        comments: [],
-        views: 0,
-        tags: this.tags,
-        draft: true,
-      };
-      this._posts.create(data);
-      this.title = '';
-      this.content = '';
-      this.image = null;
-      this.tags = [];
-      this.buttonText = 'פוסט נוצר!';
-      setTimeout(() => (this.buttonText = 'צור פוסט'), 3000);
-    });
+  async createPost() {
+    const user = this._auth.authState;
+    const data: Post = {
+      author: user.displayName || user.email,
+      authorID: user.uid,
+      content: this.content,
+      title: this.title,
+      image: this.image,
+      published: new Date(),
+      comments: [],
+      views: 0,
+      tags: this.tags,
+      draft: true,
+    };
+    await this._posts.create(data);
+    this.title = '';
+    this.content = '';
+    this.image = null;
+    this.tags = [];
+    this.buttonText = 'פוסט נוצר!';
+    setTimeout(() => (this.buttonText = 'צור פוסט'), 3000);
   }
   uploadImage(e) {
     const file = e.target.files[0];
@@ -72,11 +72,24 @@ export class PostDashboardComponent {
     if (file.type.split('/')[0] !== 'image') {
       return alert('רק תמונות');
     } else {
-      const task = this._storage.upload(path, file);
-      task.then((a) =>
-        a.ref.getDownloadURL().then((url) => (this.image = url))
+      const storageRef = ref(this._storage, path);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.uploadPercent = progress;
+        },
+        (error) => {
+          console.error(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(
+            (downloadUrl) => (this.image = downloadUrl)
+          );
+        }
       );
-      this.uploadPercent = task.percentageChanges();
     }
   }
   uploadImageTemp(e) {
@@ -85,11 +98,24 @@ export class PostDashboardComponent {
     if (file.type.split('/')[0] !== 'image') {
       return alert('רק תמונות');
     } else {
-      const task = this._storage.upload(path, file);
-      task.then((a) =>
-        a.ref.getDownloadURL().then((url) => (this.uploadTempImage = url))
+      const storageRef = ref(this._storage, path);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+      uploadTask.on(
+        'state_changed',
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          this.uploadPercent = progress;
+        },
+        (error) => {
+          console.error(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then(
+            (downloadUrl) => (this.uploadTempImage = downloadUrl)
+          );
+        }
       );
-      this.uploadTempPercent = task.percentageChanges();
     }
   }
   copy() {
@@ -98,15 +124,9 @@ export class PostDashboardComponent {
     copyText.setSelectionRange(0, 99999);
     document.execCommand('copy');
   }
-  delete() {
-    if (!confirm('האם אתה בטוח שאתה רוצה למחוק את המוצר הזה?')) {
-      return;
-    }
-    this._product.delete(this.id);
-  }
-  onCustomItemCreating(args) {
+  async onCustomItemCreating(args) {
     let newValue = args.text;
-    this._posts.createTag({ tag: newValue });
+    await this._posts.createTag({ tag: newValue });
     args.customItem = newValue;
   }
 }

@@ -1,64 +1,65 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-  AngularFirestoreDocument,
+  CollectionReference,
+  DocumentData,
+  DocumentReference,
+  Firestore,
+  Query,
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
 } from '@angular/fire/firestore';
 import { Post, Tag } from './post';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  postsCollection: AngularFirestoreCollection<Post>;
-  tagsCollection: AngularFirestoreCollection<Tag>;
-  constructor(private _store: AngularFirestore) {
-    this.postsCollection = this._store.collection('posts', (ref) =>
-      ref.orderBy('published', 'desc')
-    );
-    this.tagsCollection = this._store.collection('tags', (ref) =>
-      ref.orderBy('tag', 'desc')
-    );
+  private _store: Firestore = inject(Firestore);
+  postsQuery: Query<Post>;
+  tagsQuery: Query<Tag>;
+  postCollection: CollectionReference<Post, DocumentData>;
+  tagCollection: CollectionReference<Tag, DocumentData>;
+  constructor() {
+    this.postCollection = collection(
+      this._store,
+      'posts'
+    ) as CollectionReference<Post, DocumentData>;
+    this.tagCollection = collection(this._store, 'tags') as CollectionReference<
+      Tag,
+      DocumentData
+    >;
+    this.postsQuery = query(this.postCollection, orderBy('published', 'desc'));
+    this.tagsQuery = query(this.tagCollection, orderBy('tag', 'desc'));
   }
-  getPosts(): Observable<Post[]> {
-    return this.postsCollection.snapshotChanges().pipe(
-      map((actions) =>
-        actions.map((a) => {
-          const data = a.payload.doc.data() as Post;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        })
-      )
-    );
+  async getPosts() {
+    return (await getDocs(this.postsQuery)).docs;
   }
-  getTags() {
-    return this.tagsCollection.snapshotChanges().pipe(
-      map((actions) =>
-        actions.map((a) => {
-          const data = a.payload.doc.data() as Tag;
-          const id = a.payload.doc.id;
-          return { id, ...data };
-        })
-      )
-    );
+  async getTags() {
+    return (await getDocs(this.tagsQuery)).docs;
   }
-  getPostData(id: string): AngularFirestoreDocument<Post> {
-    return this._store.collection('posts').doc<Post>(id);
+  async getPostData(id: string): Promise<Post> {
+    const postRef = doc(this._store, 'posts', id) as DocumentReference<Post>;
+    return (await getDoc<Post, DocumentData>(postRef)).data();
   }
-  getPost(id: string): AngularFirestoreDocument<Post> {
-    return this._store.doc<Post>(`posts/${id}`);
+  async getPost(id: string) {
+    return doc(this._store, 'posts', id) as DocumentReference<Post>;
   }
-  createTag(data: Tag) {
-    this.tagsCollection.add(data);
+  async createTag(data: Tag) {
+    await addDoc(this.tagCollection, data);
   }
-  create(data: Post) {
-    this.postsCollection.add(data);
+  async create(data: Post) {
+    await addDoc(this.postCollection, data);
   }
-  delete(id: string) {
-    return this.getPost(id).delete();
+  async delete(id: string) {
+    return await deleteDoc(await this.getPost(id));
   }
-  update(id: string, formData) {
-    return this.getPost(id).update(formData);
+  async update(id: string, formData) {
+    return await updateDoc(await this.getPost(id), formData);
   }
 }

@@ -10,7 +10,7 @@
       [(ngModel)]="filter"
     />
   </mat-form-field>
-  <mat-card *ngFor="let post of filteredPosts">
+  <mat-card appearance="outlined" *ngFor="let post of filteredPosts">
     <mat-card-content style="text-align: center">
       <h2 style="color: #000" routerLink="{{ post.id }}">{{ post.title }}{{post.draft ? '(טיוטה)':''}}</h2>
       <img
@@ -83,7 +83,7 @@
   title="תגובות"
   [dragEnabled]="false"
   [rtlEnabled]="true"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
   [showCloseButton]="true"
   container=".dx-viewport"
   [(visible)]="popupVisible"
@@ -91,7 +91,7 @@
   <dxo-position my="center"> </dxo-position>
   <div *dxTemplate="let data of 'content'">
     <dx-scroll-view width="100%" height="100%">
-      <mat-card *ngIf="postPopup.comments.length > 0; else NoComments">
+      <mat-card appearance="outlined" *ngIf="postPopup.comments.length > 0; else NoComments">
         <div *ngFor="let comment of postPopup.comments; let index = i">
           <span
             >שם המגיב: <b>{{ comment.name }}</b></span
