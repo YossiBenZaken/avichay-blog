@@ -1,10 +1,10 @@
 import { AuthService } from './../../core/auth.service';
 import { PostService } from './../post.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Post } from '../post';
 import { Title } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   animate,
   state,
@@ -12,37 +12,60 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { DocumentData, QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { DxTemplateModule } from 'devextreme-angular/core';
+import { DxoPositionModule } from 'devextreme-angular/ui/nested';
+import { DxPopupModule, DxScrollViewModule } from 'devextreme-angular';
+import { MatButtonModule } from '@angular/material/button';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatCardModule } from '@angular/material/card';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgIf, NgFor, DatePipe, CommonModule } from '@angular/common';
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
-  styleUrls: ['./post-list.component.css'],
-  animations: [
-    trigger('changePage', [
-      state(
-        'active',
-        style({
-          backgroundColor: '#00e676',
-          color: 'black',
-          fontWeight: 'bold',
-          borderRadius: '50%',
-          cursor: 'pointer',
-        })
-      ),
-      state(
-        'notActive',
-        style({
-          backgroundColor: 'transparent',
-          fontWeight: 'normal',
-          cursor: 'pointer',
-        })
-      ),
-      transition('active <=> notActive', [animate('0.3s')]),
-    ]),
-  ],
+    selector: 'app-post-list',
+    templateUrl: './post-list.component.html',
+    styleUrls: ['./post-list.component.css'],
+    animations: [
+        trigger('changePage', [
+            state('active', style({
+                backgroundColor: '#00e676',
+                color: 'black',
+                fontWeight: 'bold',
+                borderRadius: '50%',
+                cursor: 'pointer',
+            })),
+            state('notActive', style({
+                backgroundColor: 'transparent',
+                fontWeight: 'normal',
+                cursor: 'pointer',
+            })),
+            transition('active <=> notActive', [animate('0.3s')]),
+        ]),
+    ],
+    standalone: true,
+    imports: [
+        NgIf,
+        MatFormFieldModule,
+        MatIconModule,
+        MatInputModule,
+        CommonModule,
+        FormsModule,
+        NgFor,
+        MatCardModule,
+        RouterLink,
+        MatBadgeModule,
+        MatButtonModule,
+        DxPopupModule,
+        DxoPositionModule,
+        DxTemplateModule,
+        DxScrollViewModule,
+        DatePipe,
+    ],
 })
 export class PostListComponent implements OnInit {
-  posts: QueryDocumentSnapshot<Post, DocumentData>[];
+  posts: Post[];
   filteredPosts: Post[];
   filter: string;
   pagination: boolean;
@@ -50,42 +73,42 @@ export class PostListComponent implements OnInit {
   numOfPages: number;
   popupVisible: boolean = false;
   postPopup: Post;
-  constructor(
-    private _posts: PostService,
-    public _auth: AuthService,
-    private _title: Title
-  ) {
-    this._title.setTitle('מכשפת יער');
-  }
+
+  private _posts = inject(PostService);
+  private _title = inject(Title);
+  public _auth = inject(AuthService);
 
   async ngOnInit() {
+    this._title.setTitle('מכשפת יער');
     this.page = 1;
     this.pagination = true;
-    this.posts = await this._posts.getPosts();
-    console.log(`Found ${this.posts.length} posts`);
-    if (
-      !this._auth.authenticated ||
-      (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
-        this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
-    ) {
-      this.posts = this.posts.filter((post) => post.data().draft == false);
-    }
-    this.filteredPosts = this.posts
-      .slice(this.page ? (this.page - 1) * 10 : 0, this.page * 10 || 10)
-      .map((post) => ({ id: post.id, ...post.data() }));
-    this.numOfPages = Math.floor(this.posts.length / 10);
-    if (this.posts.length % 10 != 0) {
-      this.numOfPages += 1;
-    }
+    await this._posts.getPosts().subscribe((posts) => {
+      this.posts = posts;
+      if (
+        !this._auth.authenticated ||
+        (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
+          this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
+      ) {
+        this.posts = this.posts.filter((post) => !post.draft);
+      }
+      this.filteredPosts = this.posts.slice(
+        this.page ? (this.page - 1) * 10 : 0,
+        this.page * 10 || 10
+      );
+      this.numOfPages = Math.floor(this.posts.length / 10);
+      if (this.posts.length % 10 != 0) {
+        this.numOfPages += 1;
+      }
+    });
   }
-  async delete(id: string) {
-    await this._posts.delete(id);
+  delete(id: string) {
+    this._posts.delete(id).subscribe();
   }
   async visible(id: string, draft: boolean) {
     const data = {
       draft: !draft,
     };
-    await this._posts.update(id, data);
+    this._posts.update(id, data).subscribe();
   }
   filterPost() {
     if (this.filter != '') {
@@ -93,11 +116,10 @@ export class PostListComponent implements OnInit {
       this.filteredPosts = this.posts
         .filter(
           (po) =>
-            po.data().title.includes(this.filter) ||
-            po.data().content.includes(this.filter) ||
-            (po.data().tags && po.data().tags.includes(this.filter))
-        )
-        .map((post) => ({ id: post.id, ...post.data() }));
+            po.title.includes(this.filter) ||
+            po.content.includes(this.filter) ||
+            (po.tags && po.tags.includes(this.filter))
+        );
     } else {
       this.pagination = true;
       if (
@@ -105,12 +127,9 @@ export class PostListComponent implements OnInit {
         (this._auth.currentUserId != '2cXuXRRfYaaItvmuNZESMJUtpCb2' &&
           this._auth.currentUserId != 'b8txRyLkBNZ1jQsiCkKtKO7nD6o2')
       ) {
-        this.posts = this.posts.filter((post) => post.data().draft == false);
+        this.posts = this.posts.filter((post) => !post.draft);
       }
-      this.filteredPosts = this.posts.map((post) => ({
-        id: post.id,
-        ...post.data(),
-      }));
+      this.filteredPosts = this.posts;
     }
   }
   changePage(page) {
@@ -118,8 +137,7 @@ export class PostListComponent implements OnInit {
     if (page < 1) return;
     this.page = page;
     this.filteredPosts = this.posts
-      .slice(this.page ? (this.page - 1) * 10 : 0, this.page * 10 || 10)
-      .map((post) => ({ id: post.id, ...post.data() }));
+      .slice(this.page ? (this.page - 1) * 10 : 0, this.page * 10 || 10);
   }
   showComments(post: Post) {
     this.popupVisible = true;

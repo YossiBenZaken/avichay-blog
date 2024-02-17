@@ -1,65 +1,35 @@
 import { Injectable, inject } from '@angular/core';
-import {
-  CollectionReference,
-  DocumentData,
-  DocumentReference,
-  Firestore,
-  Query,
-  addDoc,
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  orderBy,
-  query,
-  updateDoc,
-} from '@angular/fire/firestore';
 import { Post, Tag } from './post';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  private _store: Firestore = inject(Firestore);
-  postsQuery: Query<Post>;
-  tagsQuery: Query<Tag>;
-  postCollection: CollectionReference<Post, DocumentData>;
-  tagCollection: CollectionReference<Tag, DocumentData>;
-  constructor() {
-    this.postCollection = collection(
-      this._store,
-      'posts'
-    ) as CollectionReference<Post, DocumentData>;
-    this.tagCollection = collection(this._store, 'tags') as CollectionReference<
-      Tag,
-      DocumentData
-    >;
-    this.postsQuery = query(this.postCollection, orderBy('published', 'desc'));
-    this.tagsQuery = query(this.tagCollection, orderBy('tag', 'desc'));
+  private _http = inject(HttpClient);
+  postUrl: string = `${environment.serverUrl}/api/posts`;
+  tagUrl: string = `${environment.serverUrl}/api/tags`;
+
+  getPosts(): Observable<Post[]> {
+    return this._http.get<Post[]>(this.postUrl);
   }
-  async getPosts() {
-    return (await getDocs(this.postsQuery)).docs;
+  getTags(): Observable<Tag[]> {
+    return this._http.get<Tag[]>(this.tagUrl);
   }
-  async getTags() {
-    return (await getDocs(this.tagsQuery)).docs;
+  getPostData(id: string): Observable<Post> {
+    return this._http.get<Post>(`${this.postUrl}/${id}`);
   }
-  async getPostData(id: string): Promise<Post> {
-    const postRef = doc(this._store, 'posts', id) as DocumentReference<Post>;
-    return (await getDoc<Post, DocumentData>(postRef)).data();
+  createTag(data: Tag) {
+    return this._http.post<Tag>(this.tagUrl, data);
   }
-  async getPost(id: string) {
-    return doc(this._store, 'posts', id) as DocumentReference<Post>;
+  create(data: Post) {
+    return this._http.post<Post>(this.postUrl, data);
   }
-  async createTag(data: Tag) {
-    await addDoc(this.tagCollection, data);
+  delete(id: string) {
+    return this._http.delete(`${this.postUrl}/${id}`);
   }
-  async create(data: Post) {
-    await addDoc(this.postCollection, data);
-  }
-  async delete(id: string) {
-    return await deleteDoc(await this.getPost(id));
-  }
-  async update(id: string, formData) {
-    return await updateDoc(await this.getPost(id), formData);
+  update(id: string, formData) {
+    return this._http.put(`${this.postUrl}/${id}`,formData);
   }
 }

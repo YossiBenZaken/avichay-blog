@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   Auth,
   FacebookAuthProvider,
@@ -13,18 +13,18 @@ import {
   updatePassword,
   updateProfile,
 } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   authState: User = null;
-  constructor(
-    public afAuth: Auth,
-    private _router: Router,
-  ) {
-    this.afAuth.onAuthStateChanged((user) => {
+
+  public _auth = inject(Auth);
+  private _router = inject(Router);
+
+  constructor() {
+    this._auth.onAuthStateChanged((user) => {
       this.authState = user;
     });
   }
@@ -46,7 +46,7 @@ export class AuthService {
       const provider = new GoogleAuthProvider();
       provider.addScope('profile');
       provider.addScope('email');
-      signInWithPopup(this.afAuth, provider).then((res) => {
+      signInWithPopup(this._auth, provider).then((res) => {
         resolve(res);
         this._router.navigate(['/']);
       });
@@ -60,7 +60,7 @@ export class AuthService {
       provider.setCustomParameters({
         display: 'popup',
       });
-      signInWithPopup(this.afAuth, provider)
+      signInWithPopup(this._auth, provider)
         .then((res) => {
           console.log(res);
           resolve(res);
@@ -70,10 +70,10 @@ export class AuthService {
           if (err.code === 'auth/account-exists-with-different-credential') {
             let pendingCred = err.credential;
             let email = err.email;
-            fetchSignInMethodsForEmail(this.afAuth, email).then((methods) => {
+            fetchSignInMethodsForEmail(this._auth, email).then((methods) => {
               if (methods[0] === 'password') {
                 let password = prompt('Enter password of email');
-                signInWithEmailAndPassword(this.afAuth, email, password)
+                signInWithEmailAndPassword(this._auth, email, password)
                   .then((result) => {
                     return linkWithCredential(result.user, pendingCred);
                   })
@@ -83,7 +83,7 @@ export class AuthService {
                   });
               }
               let provider = new GoogleAuthProvider();
-              signInWithPopup(this.afAuth, provider).then((result) => {
+              signInWithPopup(this._auth, provider).then((result) => {
                 linkWithCredential(result.user, pendingCred).then((user) => {
                   resolve(user);
                   this._router.navigate(['/']);
@@ -96,7 +96,7 @@ export class AuthService {
   }
   login(body: any) {
     return new Promise<UserCredential>((resolve, reject) => {
-      signInWithEmailAndPassword(this.afAuth, body.email, body.password).then(
+      signInWithEmailAndPassword(this._auth, body.email, body.password).then(
         (res) => {
           resolve(res);
           this._router.navigate(['/']);
@@ -107,7 +107,7 @@ export class AuthService {
   signUp(body: any) {
     return new Promise<UserCredential>((resolve, reject) => {
       createUserWithEmailAndPassword(
-        this.afAuth,
+        this._auth,
         body.email,
         body.password
       ).then((res) => {
@@ -121,11 +121,11 @@ export class AuthService {
     });
   }
   logout() {
-    this.afAuth.signOut();
+    this._auth.signOut();
     this._router.navigate(['/login']);
   }
   changePassword(password: string) {
-    this.afAuth.onAuthStateChanged((user) => {
+    this._auth.onAuthStateChanged((user) => {
       updatePassword(user, password).then((value) => {
         console.log(value);
         this.logout();
@@ -134,7 +134,7 @@ export class AuthService {
     });
   }
   updateProfile(body: { name: string; photo: string }) {
-    this.afAuth.onAuthStateChanged((user) => {
+    this._auth.onAuthStateChanged((user) => {
       updateProfile(user, {
         displayName: body.name,
         photoURL: body.photo,

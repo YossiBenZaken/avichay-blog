@@ -5,6 +5,7 @@ export class Post {
   authorID: string;
   image: string;
   published: Date;
+  _id?: string;
   id?: string;
   comments: Comment[] = [];
   views: number;

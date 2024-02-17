@@ -23,11 +23,8 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    AuthenticationComponent,
-    EditProfileComponent,
-    ProfileComponent,
-  ],
-  imports: [SharedModule, RouterModule.forChild(routes)],
+    imports: [SharedModule, RouterModule.forChild(routes), AuthenticationComponent,
+        EditProfileComponent,
+        ProfileComponent],
 })
 export class AuthenticationModule {}

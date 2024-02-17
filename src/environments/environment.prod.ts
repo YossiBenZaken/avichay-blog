@@ -7,5 +7,6 @@ export const environment = {
     storageBucket: "avichay-blog.appspot.com",
     messagingSenderId: "262569971065",
     appId: "1:262569971065:web:bd3705a0fa4e86efaff3a8"
-  }
+  },
+  serverUrl: ''
 };

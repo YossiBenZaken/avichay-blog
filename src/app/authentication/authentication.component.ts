@@ -1,17 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../core/auth.service';
+import { MatButtonModule } from '@angular/material/button';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-authentication',
-  templateUrl: './authentication.component.html',
-  styleUrls: ['./authentication.component.scss'],
+    selector: 'app-authentication',
+    templateUrl: './authentication.component.html',
+    styleUrls: ['./authentication.component.scss'],
+    standalone: true,
+    imports: [
+        MatCardModule,
+        FormsModule,
+        NgIf,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+    ],
 })
 export class AuthenticationComponent implements OnInit {
   loginMode: boolean = true;
   email: string;
   psw: string;
   fullName: string;
-  constructor(private _auth: AuthService) {}
+
+  private _auth = inject(AuthService);
 
   ngOnInit() {}
   switchMode() {

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { PostService } from './../post.service';
 import { AuthService } from './../../core/auth.service';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Post } from '../post';
 import {
   Storage,
@@ -10,12 +10,43 @@ import {
   uploadBytesResumable,
 } from '@angular/fire/storage';
 import { Title } from '@angular/platform-browser';
+import { AsyncPipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { DxoToolbarModule, DxiItemModule, DxoMediaResizingModule } from 'devextreme-angular/ui/nested';
+import { DxTagBoxModule, DxHtmlEditorModule, DxPopupModule } from 'devextreme-angular';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { DashboardNavComponent } from '../dashboard-nav/dashboard-nav.component';
 @Component({
-  selector: 'app-post-dashboard',
-  templateUrl: './post-dashboard.component.html',
-  styleUrls: ['./post-dashboard.component.css'],
+    selector: 'app-post-dashboard',
+    templateUrl: './post-dashboard.component.html',
+    styleUrls: ['./post-dashboard.component.css'],
+    standalone: true,
+    imports: [
+        DashboardNavComponent,
+        MatGridListModule,
+        MatCardModule,
+        MatProgressBarModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        DxTagBoxModule,
+        DxHtmlEditorModule,
+        DxoToolbarModule,
+        DxiItemModule,
+        DxoMediaResizingModule,
+        MatButtonModule,
+        DxPopupModule,
+        MatIconModule,
+        AsyncPipe,
+    ],
 })
-export class PostDashboardComponent {
+export class PostDashboardComponent implements OnInit {
   title: string;
   image: string = null;
   content: string;
@@ -33,17 +64,21 @@ export class PostDashboardComponent {
     onClick: () => (this.uploadImagePopUp = true),
   };
   uploadTempImage: string = null;
-  constructor(
-    private _auth: AuthService,
-    private _posts: PostService,
-    private _storage: Storage,
-    private _title: Title,
-  ) {
+
+  private _auth = inject(AuthService);
+  private _posts = inject(PostService);
+  private _storage = inject(Storage);
+  private _title = inject(Title);
+
+  ngOnInit(): void {
     this._title.setTitle('מכשפת יער - פאנל ניהול');
     this._posts
       .getTags()
-      .then((tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag))));
+      .subscribe((tags) => {
+      this.tagsItems = tags.map((a: any) => (a = a.tag))
+      });
   }
+
   async createPost() {
     const user = this._auth.authState;
     const data: Post = {
@@ -58,7 +93,7 @@ export class PostDashboardComponent {
       tags: this.tags,
       draft: true,
     };
-    await this._posts.create(data);
+    this._posts.create(data).subscribe();
     this.title = '';
     this.content = '';
     this.image = null;
@@ -126,7 +161,7 @@ export class PostDashboardComponent {
   }
   async onCustomItemCreating(args) {
     let newValue = args.text;
-    await this._posts.createTag({ tag: newValue });
+    this._posts.createTag({ tag: newValue }).subscribe();
     args.customItem = newValue;
   }
 }

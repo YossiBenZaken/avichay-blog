@@ -13,7 +13,7 @@
               [(ngModel)]="selectedBackground"
             >
               <mat-radio-button
-                *ngFor="let background of backgrounds$ | async; index as i"
+                *ngFor="let background of backgrounds; index as i"
                 value="{{ i }}"
                 [checked]="selectedBackground == i"
                 class="mx-1"

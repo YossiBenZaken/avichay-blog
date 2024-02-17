@@ -16,6 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
 import { DashboardNavComponent } from './dashboard-nav/dashboard-nav.component';
 import { DashboardSettingsComponent } from './dashboard-settings/dashboard-setting.component';
+import { HttpClientModule } from '@angular/common/http';
 
 const routes: Routes = [
   { path: 'blog', component: PostListComponent },
@@ -38,26 +39,25 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    PostDashboardComponent,
-    PostDetailComponent,
-    PostListComponent,
-    SafeHtmlPipe,
-    DashboardStatsComponent,
-    DashboardNavComponent,
-    DashboardSettingsComponent,
-  ],
-  imports: [
-    SharedModule,
-    RouterModule.forChild(routes),
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    LayoutModule,
-  ],
-  providers: [PostService],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    imports: [
+        SharedModule,
+        RouterModule.forChild(routes),
+        MatGridListModule,
+        MatCardModule,
+        MatMenuModule,
+        MatIconModule,
+        MatButtonModule,
+        LayoutModule,
+        PostDashboardComponent,
+        PostDetailComponent,
+        PostListComponent,
+        SafeHtmlPipe,
+        DashboardStatsComponent,
+        DashboardNavComponent,
+        DashboardSettingsComponent,
+        HttpClientModule
+    ],
+    providers: [PostService],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class PostsModule {}

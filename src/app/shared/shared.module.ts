@@ -7,20 +7,20 @@ import { FormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 @NgModule({
-  declarations: [NavbarComponent],
-  imports: [
-    CommonModule,
-    MaterialModule,
-    RouterModule,
-    FormsModule,
-    ScrollingModule,
-  ],
-  exports: [
-    CommonModule,
-    MaterialModule,
-    NavbarComponent,
-    FormsModule,
-    RouterModule,
-  ],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        RouterModule,
+        FormsModule,
+        ScrollingModule,
+        NavbarComponent,
+    ],
+    exports: [
+        CommonModule,
+        MaterialModule,
+        NavbarComponent,
+        FormsModule,
+        RouterModule,
+    ],
 })
 export class SharedModule {}

@@ -22,7 +22,7 @@
       <p>
         <small
           >נכתב ע"י {{ post.author }} &bull; ב
-          {{ post.published.toMillis() | date: "dd/MM/yyyy HH:mm" }}</small
+          {{ post.published.seconds * 1000 | date: "dd/MM/yyyy HH:mm" }}</small
         >
       </p>
       <p *ngIf="post.tags && post.tags.length > 0">

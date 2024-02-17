@@ -1,25 +1,21 @@
-import { Injectable } from '@angular/core';
-import { Firestore, setDoc,doc, getDoc } from '@angular/fire/firestore';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { User } from '@angular/fire/auth';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  constructor(private _store: Firestore) {}
-  async save(user: User) {
-    await setDoc(doc(this._store, "users", user.uid), {
+  private _http = inject(HttpClient);
+  userUrl: string = `${environment.serverUrl}/api/tags`;
+  save(user: User) {
+    return this._http.post(this.userUrl, {
       name: user.displayName,
       email: user.email,
       photo: user.photoURL,
-    })
+    });
   }
-  async get(uid: string) {
-    const docRef = doc(this._store, `users/${uid}`);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      throw new Error('document not found');
-    }
+  get(uid: string) {
+    return this._http.get(`${this.userUrl}/${uid}`);
   }
 }

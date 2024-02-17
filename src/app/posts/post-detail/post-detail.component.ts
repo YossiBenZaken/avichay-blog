@@ -5,17 +5,48 @@ import {
   Component,
   OnInit,
   ViewEncapsulation,
-  AfterViewInit
+  AfterViewInit,
+  inject,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Post, Comment } from '../post';
 import { Meta, Title } from '@angular/platform-browser';
+import { SafeHtmlPipe } from '../../safe-html.pipe';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { DxoToolbarModule, DxiItemModule, DxoMediaResizingModule } from 'devextreme-angular/ui/nested';
+import { DxTagBoxModule, DxHtmlEditorModule } from 'devextreme-angular';
+import { FormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { NgIf, NgFor, AsyncPipe, DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-post-detail',
-  templateUrl: './post-detail.component.html',
-  styleUrls: ['./post-detail.component.css'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'app-post-detail',
+    templateUrl: './post-detail.component.html',
+    styleUrls: ['./post-detail.component.css'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatCardModule,
+        MatFormFieldModule,
+        MatInputModule,
+        FormsModule,
+        DxTagBoxModule,
+        DxHtmlEditorModule,
+        DxoToolbarModule,
+        DxiItemModule,
+        DxoMediaResizingModule,
+        MatButtonModule,
+        RouterLink,
+        MatIconModule,
+        NgFor,
+        AsyncPipe,
+        DatePipe,
+        SafeHtmlPipe,
+    ],
 })
 export class PostDetailComponent implements OnInit, AfterViewInit {
   post: Post;
@@ -26,21 +57,19 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
   prePost: Post;
   nextPost: Post;
   routeId: string;
-  constructor(
-    private _route: ActivatedRoute,
-    private _posts: PostService,
-    public _auth: AuthService,
-    private _router: Router,
-    private _title: Title,
-    private _meta: Meta
-  ) {
-    this.routeId = this._route.snapshot.paramMap.get('id');
-  }
+
+  private _route = inject(ActivatedRoute);
+  private _posts = inject(PostService);
+  public _auth = inject(AuthService);
+  private _router = inject(Router);
+  private _title = inject(Title);
+  private _meta = inject(Meta);
 
   async ngOnInit() {
+    this.routeId = this._route.snapshot.paramMap.get('id');
     this._posts
       .getTags()
-      .then((tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag))));
+      .subscribe((tags) => (this.tagsItems = tags.map((a: any) => (a = a.tag))));
     await this.getPost();
     this._router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.comment.name = this._auth.authState.displayName || '';
@@ -48,36 +77,33 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this._route.paramMap.subscribe(async (param) => {
       const id = param.get('id');
-      let posts = await this._posts.getPosts();
-      const lengthOfPosts = posts.length;
-      const thisPost = posts.filter((pf) => pf.id === id)[0];
-      const indexOfThisPost = posts.findIndex((p) => p == thisPost);
-      if (indexOfThisPost > 0) {
-        this.nextPost = {
-          id: posts[indexOfThisPost - 1].id,
-          ...posts[indexOfThisPost - 1].data(),
-        };
-      }
-      if (indexOfThisPost < lengthOfPosts) {
-        this.prePost = {
-          id: posts[indexOfThisPost + 1].id,
-          ...posts[indexOfThisPost + 1].data(),
-        };
-      }
+      await this._posts.getPosts().subscribe((posts) => {
+        const lengthOfPosts = posts.length;
+        const thisPost = posts.filter((pf) => pf.id === id)[0];
+        const indexOfThisPost = posts.findIndex((p) => p == thisPost);
+        if (indexOfThisPost > 0) {
+          this.nextPost = { ...posts[indexOfThisPost - 1] };
+        }
+        if (indexOfThisPost < lengthOfPosts) {
+          this.prePost = {
+            ...posts[indexOfThisPost + 1],
+          };
+        }
+      });
     });
   }
   getPost() {
     const id = this._route.snapshot.paramMap.get('id');
     this._posts
       .getPostData(id)
-      .then(async (doc) => {
+      .subscribe((doc) => {
         this.post = doc;
         if (this.post.views) {
           this.post.views += 1;
         } else {
           this.post.views = 1;
         }
-        await this._posts.update(id, this.post);
+        this._posts.update(id, this.post).subscribe();
         this._title.setTitle('מכשפת יער - ' + this.post.title);
         this._meta.updateTag({
           property: 'og:title',
@@ -93,15 +119,13 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
             content: this.post.image,
           });
         }
-      })
-      .then(() => {
         setTimeout(() => {
           var span = document.getElementsByTagName('span');
           Array.prototype.forEach.call(span, function (el) {
             el.innerHTML = el.innerHTML.replace(/&nbsp;/gi, ' ');
           });
         }, 0);
-      });
+      })
   }
   async updatePost() {
     const formData = {
@@ -110,7 +134,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
       tags: this.tags,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    await this._posts.update(id, formData);
+    this._posts.update(id, formData).subscribe();
     this.editing = false;
   }
   async updateComment() {
@@ -124,7 +148,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
       comments: comment,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    await this._posts.update(id, formData);
+    this._posts.update(id, formData).subscribe();
     this.comment.content = '';
     this.comment.name = this._auth.authState.displayName || '';
   }
@@ -135,11 +159,11 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
       comments: comment,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    await this._posts.update(id, formData);
+    this._posts.update(id, formData).subscribe();
   }
-  async delete() {
+  delete() {
     const id = this._route.snapshot.paramMap.get('id');
-    await this._posts.delete(id);
+    this._posts.delete(id).subscribe();
     this._router.navigate(['/blog']);
   }
   async visible() {
@@ -148,7 +172,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
       draft: this.post.draft,
     };
     const id = this._route.snapshot.paramMap.get('id');
-    await this._posts.update(id, data);
+    this._posts.update(id, data).subscribe();
   }
   share(company) {
     if (company === 'facebook') {
@@ -165,7 +189,7 @@ export class PostDetailComponent implements OnInit, AfterViewInit {
   }
   async onCustomItemCreating(args) {
     let newValue = args.text;
-    await this._posts.createTag({ tag: newValue });
+    this._posts.createTag({ tag: newValue }).subscribe();
     args.customItem = newValue;
   }
 }
