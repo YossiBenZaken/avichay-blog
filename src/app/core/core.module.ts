@@ -2,11 +2,7 @@ import { UserService } from './user.service';
 import { AuthService } from './auth.service';
 import { NgModule } from '@angular/core';
 import { AsyncPipe, CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@NgModule({
-  declarations: [],
-  imports: [CommonModule, HttpClientModule],
-  providers: [AuthService, UserService, AsyncPipe],
-})
+@NgModule({ declarations: [], imports: [CommonModule], providers: [AuthService, UserService, AsyncPipe, provideHttpClient(withInterceptorsFromDi())] })
 export class CoreModule {}
